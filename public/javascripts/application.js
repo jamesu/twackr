@@ -85,7 +85,7 @@ Timer = {
 			var delta_desc = "";
 			if (delta_h < 1.0) {
 				if (delta_m < 1.0)
-					delta_desc = delta_h + "H" + delta_m + "M";
+					delta_desc = delta_s + "S";
 				else
 					delta_desc = delta_m + "M";
 			} else {
