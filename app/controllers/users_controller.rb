@@ -74,6 +74,7 @@ class UsersController < ApplicationController
     
     respond_to do |f|
       f.html { redirect_to root_path }
+      f.js { update_page {|p| p.redirect_to root_path } }
     end
   end
   
