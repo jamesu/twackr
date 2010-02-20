@@ -3,3 +3,5 @@
 #entries
   = render :partial => 'entries/entry', :collection => @entries
 
+- content_for :js_templates do
+  = "Timer.init();"

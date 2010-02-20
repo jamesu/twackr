@@ -3,4 +3,6 @@
     - unless entry.terminated?
       = link_to_remote "FINISH", :url => terminate_entry_path(entry), :method => :put
   .entryContent{:class => entry.is_overdue? ? 'overdue' : nil}= entry.content_html
-  .entryTime{:class => entry.terminated? ? 'done' : 'active'}= friendly_time(entry.current_time)
+  .entryTime{:class => entry.terminated? ? 'done' : 'active', :start_date => entry.start_date.to_s}= friendly_time(entry.current_time)
+  - if entry.done_date.nil?
+    = javascript_tag "Timer.register(#{entry.id});"

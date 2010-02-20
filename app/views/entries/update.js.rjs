@@ -1,1 +1,6 @@
 page.replace_html "entry_#{@entry.id}", :partial => 'entries/entry', :object => @entry
+if @entry.done_date
+  page.call "Timer.remove", @entry.id
+else
+  page.call "Timer.restart", @entry.id
+end

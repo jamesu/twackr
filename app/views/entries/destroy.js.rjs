@@ -1,1 +1,2 @@
+page.call "Timer.remove", @entry_id
 page.remove "entry_#{@entry_id}"
