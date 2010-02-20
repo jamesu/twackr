@@ -1,4 +1,3 @@
-#projects
-  - @grouped_projects.each do |group|
-    %h2= h(group[0].name)
+#clients
+  - @clients.each do |client|
     = render :partial => 'clients/client', :collection => group[1]

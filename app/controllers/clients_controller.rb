@@ -3,7 +3,6 @@ class ClientsController < ApplicationController
   
   def index
     @clients = @logged_user.clients
-    @grouped_projects = @logged_user.projects.reject{|r|r.client.nil?}.group_by(&:client)
     
     respond_to do |f|
       f.html {}
