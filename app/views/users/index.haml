@@ -1,0 +1,5 @@
+%h2= "Users"
+
+#users
+  - @users.each do |user|
+    .user= link_to user.email, user_path(@user)

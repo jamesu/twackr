@@ -1,0 +1,6 @@
+.project{:id => "project_#{project.id}"}
+  .actions
+    = link_to "Edit", edit_project_path(project)
+  .projectName
+    = h project.name 
+    = entry_project_tag(project.tag)

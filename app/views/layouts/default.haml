@@ -1,0 +1,52 @@
+!!! Strict
+%html
+  %head
+    %meta{ 'http-equiv' => 'content-type', :content => 'text/html;charset=UTF-8'}/
+    %title= "TrackR - #{h(@page_title)}"
+    != stylesheet_link_tag 'application'
+    %meta{:name => "viewport", :content => "width=320"}
+    %meta{:name => "viewport", :content => "initial-scale=1.0"}
+    %meta{:name => "viewport", :content => "user-scalable=false"}
+
+    = javascript_include_tag 'prototype.js' 
+    = javascript_include_tag 'effects.js'
+    = javascript_include_tag 'controls.js'
+    = javascript_include_tag 'flotr.js'
+    = javascript_include_tag 'application.js'
+
+    = yield :js_includes
+    - javascript_tag do
+      = yield :js_templates
+    
+    - if protect_against_forgery?
+      = javascript_tag "const AUTH_TOKEN = #{form_authenticity_token.inspect};"
+    
+  %body#body
+    #wrapper
+      
+      -# Top of page (tabs, user box, etc)
+      #header
+        .topCrumbs
+          = link_to "Projects", projects_path
+          = link_to "Clients", clients_path
+          = link_to "Services", services_path
+          = link_to_remote "Logout", :url => logout_path, :method => :destroy
+        = navigation_for_page
+        .clear
+      
+      #outerWrapper
+        #innerWrapper.totalPageWidth
+          -# Displays general alerts
+          = status_bar
+          
+          #pageContent
+            #content
+              #innerContent
+                - if @no_page_tile.nil?
+                  %h1= h @page_title
+                -# Content
+                = yield
+            
+            %div{:style => 'clear:both'}
+          
+        = render :partial => 'layouts/footer'

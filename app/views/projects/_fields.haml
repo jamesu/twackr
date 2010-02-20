@@ -1,0 +1,9 @@
+%div
+  = label :name, "Name"
+  = f.text_field :name
+%div
+  = label :tag, "Shorthand Tag"
+  = f.text_field :tag
+%div
+  = label :client, "Client"
+  = f.select 'client_id', client_select_fields(@project.new_record? ? @logged_user : @project.user)

@@ -1,0 +1,6 @@
+.service{:id => "service_#{service.id}"}
+  .actions
+    = link_to "Edit", edit_service_path(service)
+  .serviceName
+    = h service.name 
+    = entry_service_tag(service.tag)

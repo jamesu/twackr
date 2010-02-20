@@ -1,0 +1,8 @@
+%h2= "Reports"
+
+%h3= "Time spent on projects"
+= entry_bar_report('entry_time_spent', @project_times, @project_names)
+
+%h3= "Money earned from projects"
+= entry_bar_report('entry_money_earned', @project_rates, @project_names)
+

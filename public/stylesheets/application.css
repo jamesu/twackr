@@ -1,0 +1,360 @@
+@import 'reset.css';
+
+a { color: #000; }
+a:visited { color: #666; }
+a:hover { color: #fff; background-color:#000; }
+
+h1 { font-size: 28px; font-weight: bolder; padding-bottom: 6px; }
+
+h2 { font-size: 18px; font-weight: bolder; padding-bottom: 6px; }
+
+h3 { font-size: 16px; font-weight: bolder; padding-bottom: 6px; }
+
+body { margin: 0px; padding: 0px; background-color: #eee; color: #000; }
+
+label { display: block; }
+
+input.checkbox {
+  padding: 0px;
+  margin: 2px;
+}
+
+label.checkbox {
+  clear: none;
+  display: inline;
+}
+
+p.desc {
+  color: #555;
+}
+
+ul, ol { padding-left: 28px; }
+
+pre { overflow: auto; }
+
+body, p, ol, ul, td {
+  font-family: lucida grande, verdana, arial, helvetica, sans-serif;
+  font-size:   13px;
+  line-height: 18px;
+}
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+form div {
+  margin-bottom: 3px;
+}
+
+#header {
+    margin: 0pt auto;
+    /* width: 600px; */
+    padding: 8px 6px 0px 6px; 
+    text-align: left;
+    
+    background: #007700;
+}
+
+/* outer wrapper for content. contains side background */
+#outerWrapper {
+}
+
+#innerWrapper {
+    /*margin: 0pt 0pt 0pt 48px;*/
+    text-align: left;
+    padding: 0px 2px 18px 2px;
+}
+
+#pageContent {
+  margin-top: 12px;
+}
+
+#innerContent {
+    padding: 18px 16px 18px 16px;
+}
+
+/* tabs */
+#tabs_wrapper {
+    margin: 0pt auto;
+    text-align: left;
+    
+    padding: 12px 6px 0px 6px;
+}
+
+#tabs_wrapper ul {
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    
+    margin: 0pt;
+    padding: 0 12px;
+}
+
+#tabs_wrapper ul li {
+    float: left;
+    margin: 0pt 1px;
+}
+
+#tabs_wrapper ul li a {
+    display: block;
+    
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    
+    padding: 2px 12px;
+    color: #fff;
+}
+
+#tabs_wrapper ul a.active {
+    background: #eee;
+    text-decoration: none;
+    
+    color: #000;
+}
+
+#tabs_wrapper ul {
+    float:left;
+}
+
+/* content floats left in the main box */
+#content {
+    float: left;
+    width: 100%;
+    background: #fff;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    
+    margin: 0px;
+}
+
+/* sidebar floats right in the main box */
+#sidebar {
+    width: 190px;
+    float: right;
+    
+    margin: 0px;
+}
+
+.sidebarBlock {
+  padding-bottom: 3px;
+  margin: 6px 0px 6px 0px;
+}
+
+.newPage {
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+#wrapper {
+  text-align: center;
+}
+
+input.long, textarea.long {
+  width: 99%;
+}
+
+input.moderate, textarea.moderate {
+  width: 70%;
+}
+
+.floatleft {
+  float: left;
+}
+
+.clear {
+  clear: both;
+}
+
+/* user form */
+
+#userForm label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+#userForm label.yesno {
+  display: inline;
+}
+
+label {
+  font-weight: bolder;
+}
+
+label.yesno {
+  display: inline;
+}
+
+label.check {
+  font-weight: normal;
+  display: inline;
+}
+
+.formSubmit {
+  margin-top: 12px;
+}
+
+.hint
+{
+  background-color: #FFFFCC;
+  border: 2px solid #E9BE31;
+  
+  margin: 0 0 5px 0;
+  padding: 5px;
+}
+
+.hint .header {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 3px;
+  border-bottom: 1px solid #E9BE31;
+}
+
+#statusBar {
+  display: none;
+}
+
+#statusBar.success,
+.flash.error, .flash.success {
+  margin: 10px 0;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  
+  clear: both;
+  cursor: pointer;
+  text-align: left;
+}
+
+.flash.error {
+  background: #FFB0B0;
+  border-color: red;
+}
+
+#statusBar.success,
+.flash.success {
+  background: #90DC90;
+  border-color: green;
+}
+
+.statusBarContainer {
+	padding-bottom: 10px;
+}
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+#entries {
+	
+}
+
+#entries .entry, #projects div.project, #services div.service {
+	border-bottom: 1px solid #ccc;
+	padding-top: 3px;
+	padding-bottom: 6px;
+}
+
+.entryContent.overdue {
+	color: rgb(255,0,0);
+	font-weight: bold;
+}
+
+#entries .actions {
+	float: right;
+}
+
+#projects .actions {
+	float: right;
+}
+
+#services .actions {
+	float: right;
+}
+
+#entryBox {
+  background: #fff;
+  margin: -16px -14px 0px -14px;
+  padding: 18px 16px 18px 16px;
+  
+  border-bottom: 2px dashed #eee;
+}
+
+#entry_content {
+	width: 100%;
+}
+
+#header .topCrumbs {
+	text-align: right;
+}
+
+span.project, span.project_ph {
+	color: #fff;
+	font-weight: bold;
+	border: 1px solid rgb(110,210,235);
+	background-color: rgb(110,210,235);
+	-webkit-border-radius: 6px;
+	padding-left: 2px;
+	padding-right: 2px;
+	cursor: pointer;
+}
+
+span.service, span.service_ph {
+	color: #fff;
+	font-weight: bold;
+	background-color: rgb(255,150,20);	
+	border: 1px solid rgb(255,150,20);
+	-webkit-border-radius: 6px;
+	padding-left: 2px;
+	padding-right: 2px;
+	cursor: pointer;
+}
+
+span.project_ph, span.service_ph {
+	background-color: rgb(145,145,145);	
+	border: 1px solid rgb(145,145,145);
+}
+
+span.time {
+	color: #fff;
+	font-weight: bold;
+	background-color: rgb(255,100,100);	
+	border: 1px solid rgb(255,100,100);
+	-webkit-border-radius: 6px;
+	padding-left: 2px;
+	padding-right: 2px;
+}

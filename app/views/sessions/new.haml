@@ -1,0 +1,21 @@
+- @page_title = "Login"
+
+- form_tag session_path do
+  #normal_login.inner{:style => 'display:block'}
+    #loginUsernameField
+      %label{:for => 'loginUsername'}= "Username"
+      != text_field_tag 'email', @email, :size => 30, :id => 'loginUsername', :class => 'medium'
+    #loginPasswordField
+      %label{:for => 'loginPassword'}= "Password"
+      != password_field_tag 'password', nil, :size => 30, :id => 'loginPassword', :class => 'medium'
+    #loginCustom
+      = check_box_tag 'remember_me', '1', @remember_me
+      %label.checkbox{:for => 'loginRememberMe'}= "Remember me"
+      %div
+        != link_to "Forgot password?" , :controller => 'users', :action => 'forgot_password'
+      
+  
+  #dialogSubmit
+    %button.submit{:type => 'submit'}= "Login"
+    
+  

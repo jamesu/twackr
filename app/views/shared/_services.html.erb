@@ -1,0 +1,33 @@
+<%
+render_tabnav :tabsWrapper do 
+    
+  # this generates a tab for every controller in your app
+  # you'll probably want to delete this and
+  # add tabs one by one as shown below
+
+  add_tab do |t|
+    t.named "..."
+    t.titled "List"
+    t.highlights_on @service.nil?
+    t.links_to services_path
+  end
+
+  add_tab do |t|
+    t.named "+"
+    t.titled "Add New"
+    t.links_to new_service_path
+    t.highlights_on @service && @service.new_record?
+  end
+
+  current_user.services.each do |service|
+	next if service.new_record?
+    add_tab do |t|
+      t.named service.name
+      t.titled "Go to #{service.name}"
+      t.links_to service_path(service)
+      t.highlights_on @service == service
+    end
+  end
+
+end
+%>

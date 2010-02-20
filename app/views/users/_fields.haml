@@ -1,0 +1,16 @@
+%div
+  = label :email, "Email"
+  = f.text_field :email
+%div
+  = label :password, "Password"
+  = f.password_field :password
+%div
+  = label :password_confirmation, "Password Confirmation"
+  = f.password_field :password_confirmation
+%div
+  = label :rate, "Default hourly rate"
+  = f.text_field :rate
+%div
+  = label :timezone, "Timezone"
+  %label{:for => 'userFormTimezone'}= "Time zone"
+  = time_zone_select 'user', 'timezone', nil, {}, {:class => 'moderate'}

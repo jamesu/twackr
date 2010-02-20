@@ -1,0 +1,14 @@
+%h2= "Reports"
+= @sum_range_list.map{}
+
+%h3= "Money earned"
+= entry_bar_report('entry_money', @summed_rates.map{|r|r[1]}, @sum_range_list)
+
+%h3= "Expected money earned"
+= entry_bar_report('entry_money_expected', @summed_expected_rates.map{|r|r[1]},  @sum_range_list)
+
+%h3= "Time spent"
+= entry_bar_report('entry_time', @summed_times.map{|r|r[1]},  @sum_range_list)
+
+%h3= "Expected time spent"
+= entry_bar_report('entry_time_expected', @summed_expected_times.map{|r|r[1]}, @sum_range_list)

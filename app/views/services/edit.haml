@@ -1,0 +1,4 @@
+- form_for @service do |f|
+  = error_messages_for :service
+  = render :partial => 'fields', :locals => {:f => f}
+  = f.submit "Update"

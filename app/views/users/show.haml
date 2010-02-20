@@ -1,0 +1,4 @@
+%h2= "User #{@user.email}"
+
+#user
+	= link_to_remote "Delete", :url => user_path(@user), :method => :delete

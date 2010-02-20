@@ -1,0 +1,2 @@
+page.insert_html :top, "entries", :partial => 'entries/entry', :object => @entry
+page.visual_effect :appear, "entry_#{@entry.id}"
