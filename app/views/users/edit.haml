@@ -2,3 +2,5 @@
   = error_messages_for :user
   = render :partial => 'fields', :locals => {:f => f}
   = f.submit "Update"
+  %span="or"
+  = link_to_remote "Delete", :url => user_path(@user), :method => :delete, :confirm => "Are you sure?"
