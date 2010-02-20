@@ -1,4 +1,11 @@
-- @page_title = "Entries"
+- if @service
+  - @page_title = @service.name
+- elsif @client
+  - @page_title = @client.name
+- elsif @project
+  - @page_title = @project.name
+- else
+  - @page_title = "Entries"
 = new_entry_form(@project, @client, @service)
 
 #entries
