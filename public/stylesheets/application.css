@@ -327,20 +327,27 @@ label.check {
 	width: 100%;
 }
 
+.entryTime {
+	color: #afafaf;
+}
+
 #header .topCrumbs {
 	text-align: right;
 	background-color: #000;
 	color: #fff;
 	margin-left: -6px;
 	margin-right: -6px;
+	padding: 3px 2px;
 }
 
-#header .topCrumbs a {
+#header .topCrumbs a, #header .topCrumbs a:visited {
 	color: #fff;
+	text-decoration: none;
 }
 
-#header .topCrumbs a:visited {
-	color: #ccc;
+#header .topCrumbs a.active {
+	color: #F9C900;
+	font-weight: bold;
 }
 
 span.project, span.project_ph {
