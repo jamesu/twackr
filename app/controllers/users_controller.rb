@@ -26,10 +26,10 @@ class UsersController < ApplicationController
       if @user.save
         default_client = @user.clients.build(:name => 'Self')
         default_client.save
-        default_project = @user.projects.build(:name => 'Default')
+        default_project = @user.projects.build(:name => 'Default', :tag => 'self')
         default_project.client = default_client
         default_project.save
-        default_service = @user.services.build(:name => 'Default')
+        default_service = @user.services.build(:name => 'Default', :tag => 'self')
         default_service.save
         
         @user.default_client = default_client
@@ -41,7 +41,7 @@ class UsersController < ApplicationController
         self.current_user = @user
         f.html{ flash.now[:info] = "Saved!"; redirect_to(projects_path) }
       else  
-        f.html{ flash.now[:error] = "Error saving!" }
+        f.html{ flash.now[:error] = "Error saving!"; render :new }
       end
     end
   end
@@ -103,7 +103,7 @@ private
   end
   
   def user_layout
-    [:new, :create].include?(action) ? 'dialog' : 'default'
+    ['new', 'create'].include?(action_name) ? 'dialog' : 'default'
   end
   
 end

@@ -12,5 +12,4 @@
   = f.text_field :rate
 %div
   = label :timezone, "Timezone"
-  %label{:for => 'userFormTimezone'}= "Time zone"
   = time_zone_select 'user', 'timezone', nil, {}, {:class => 'moderate'}

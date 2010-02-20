@@ -75,6 +75,7 @@ class User < ActiveRecord::Base
   
   validates_presence_of :email
   validates_uniqueness_of :email
+  validates_format_of     :email,       :with => Authentication.email_regex, :message => "Invalid email address"
   
   validates_presence_of :password, :if => :password_changed?
   validates_length_of :password, :minimum => 4, :if => :password_changed?

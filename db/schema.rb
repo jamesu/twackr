@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20100125103357) do
     t.datetime "remember_token_expires_at"
     t.integer  "default_project_id",  :null => false, :default => 0
     t.integer  "default_client_id", :null => false, :default => 0
+    t.integer  "default_service_id", :null => false, :default => 0
     t.timestamps
   end
   
