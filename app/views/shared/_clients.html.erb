@@ -22,8 +22,8 @@ render_tabnav :tabsWrapper do
   current_user.clients.each do |client|
 	next if client.new_record?
     add_tab do |t|
-      t.named client.name
-      t.titled "Go to #{client.name}"
+      t.named h(client.name)
+      t.titled "Go to #{h client.name}"
       t.links_to client_path(client)
       t.highlights_on @client == client
     end

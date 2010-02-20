@@ -1,7 +1,14 @@
 class ProjectsController < ApplicationController
-  before_filter :find_project, :except => [:index, :new, :create]
+  before_filter :find_project, :except => [:index, :entries, :new, :create]
   
   def index
+    @projects = @logged_user.projects
+    respond_to do |f|
+      f.html {}
+    end
+  end
+  
+  def entries
     @projects = @logged_user.projects
     @entries = @logged_user.entries.find(:all, :conditions => {:project_id => @logged_user.project_ids}, :order => 'start_date DESC')
     respond_to do |f|

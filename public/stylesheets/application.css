@@ -51,7 +51,7 @@ form div {
 #header {
     margin: 0pt auto;
     /* width: 600px; */
-    padding: 8px 6px 0px 6px; 
+    padding: 0px 6px 0px 6px; 
     text-align: left;
     
     background: #007700;
@@ -283,15 +283,24 @@ label.check {
 	
 }
 
-#entries .entry, #projects div.project, #services div.service {
+#entries .entry, #projects div.project, #services div.service, #clients div.client  {
 	border-bottom: 1px solid #ccc;
 	padding-top: 3px;
 	padding-bottom: 6px;
 }
 
+.clientName, .projectName, .serviceName {
+	font-weight: bold;
+	font-size: 16px;
+}
+
 .entryContent.overdue {
 	color: rgb(255,0,0);
 	font-weight: bold;
+}
+
+#clients .actions {
+	float: right;
 }
 
 #entries .actions {
@@ -320,6 +329,18 @@ label.check {
 
 #header .topCrumbs {
 	text-align: right;
+	background-color: #000;
+	color: #fff;
+	margin-left: -6px;
+	margin-right: -6px;
+}
+
+#header .topCrumbs a {
+	color: #fff;
+}
+
+#header .topCrumbs a:visited {
+	color: #ccc;
 }
 
 span.project, span.project_ph {

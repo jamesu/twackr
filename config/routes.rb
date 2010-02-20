@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :services, :collection => {:report => :get}
 
-  map.resources :projects, :collection => {:report => :get}
+  map.resources :projects, :collection => {:report => :get, :entries => :get}
   
   map.resources :entries, :member => {:terminate => :put}, :collection => {:report => :get} 
   map.resources :users, :collection => {:forgot_password => :any}
@@ -12,5 +12,5 @@ ActionController::Routing::Routes.draw do |map|
   map.login  '/login',  :controller => 'sessions', :action => 'new'
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
 
-  map.root :controller => :projects
+  map.root :controller => :projects, :action => :entries
 end

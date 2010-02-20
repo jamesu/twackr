@@ -9,5 +9,5 @@
     - elsif !service.nil?
       = f.label :content, "What #{entry_service_tag(service.tag)} are you working on?"
     - else
-      = f.label :content, "What are you doing?"
+      = f.label :content, "What are you doing? (<a href=\"/taglist.html\" target=\"_blank\">Help?</a>)"
     = f.text_field :content

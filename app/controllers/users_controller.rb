@@ -103,7 +103,7 @@ private
   end
   
   def user_layout
-    [:new, :create].include? :action ? 'dialog' : 'default'
+    [:new, :create].include?(action) ? 'dialog' : 'default'
   end
   
 end

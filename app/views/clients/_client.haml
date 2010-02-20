@@ -3,3 +3,8 @@
     = link_to "Edit", edit_client_path(client)
   .clientName
     = h client.name
+  .clientProjects
+    - client.projects.each do |project|
+      .clientProject
+        = link_to h(project.name), project_path(project)
+

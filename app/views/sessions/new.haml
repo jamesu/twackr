@@ -12,8 +12,7 @@
       = check_box_tag 'remember_me', '1', @remember_me
       %label.checkbox{:for => 'loginRememberMe'}= "Remember me"
       %div
-        != link_to "Forgot password?" , :controller => 'users', :action => 'forgot_password'
-      
+        != link_to "Register New Account" , :controller => 'users', :action => 'new'
   
   #dialogSubmit
     %button.submit{:type => 'submit'}= "Login"

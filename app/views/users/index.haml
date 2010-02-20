@@ -2,4 +2,4 @@
 
 #users
   - @users.each do |user|
-    .user= link_to user.email, user_path(@user)
+    .user= link_to h(user.email), user_path(@user)
