@@ -3,6 +3,8 @@ class Client < ActiveRecord::Base
   has_many :projects, :dependent => :destroy
   has_many :entries, :through => :projects, :order => 'start_date DESC'
   
+  attr_accessible :name
+  
   def is_default_client?
     self.user.default_client_id == this.id
   end

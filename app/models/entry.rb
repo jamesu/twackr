@@ -5,6 +5,8 @@ class Entry < ActiveRecord::Base
   
   before_create :check_entry
   
+  attr_accessible :content, :service_id, :project_id
+  
   def start(started_at=nil)
     self.start_date = started_at || Time.now
     self.seconds = nil

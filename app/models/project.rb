@@ -5,6 +5,7 @@ class Project < ActiveRecord::Base
   has_many :entries, :dependent => :destroy, :order => 'start_date DESC'
   
   validates_format_of :tag, :with => /[a-zA-Z0-9\-_]*/
+  attr_accessible :name, :tag, :client_id
   
   def is_default_project?
     self.user.default_project_id == this.id

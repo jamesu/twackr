@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
   belongs_to :default_client, :class_name => 'Client', :foreign_key => 'default_client_id'
   belongs_to :default_service, :class_name => 'Service', :foreign_key => 'default_service_id'
   
+  attr_accessible :email, :password, :password_confirmation, :timezone, :rate
+  
   def before_create
     self.timezone ||= "UTC"
   end
