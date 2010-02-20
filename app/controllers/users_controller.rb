@@ -8,6 +8,7 @@ class UsersController < ApplicationController
   def index
     respond_to do |f|
       if @logged_user.admin
+        @users = User.find(:all)
         f.html{}
       else
         f.html{redirect_to user_path(@logged_user)}
