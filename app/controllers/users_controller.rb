@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   skip_before_filter :login_required, :only => [:new, :create]
-  before_filter :find_user, :except => [:index, :new, :create]
+  before_filter :find_user, :except => [:index, :new, :create, :settings]
   before_filter :check_edit?, :only => [:edit, :update, :destroy, :show]
   
   layout :user_layout
@@ -47,6 +47,11 @@ class UsersController < ApplicationController
   end
   
   def edit
+  end
+  
+  def settings
+    @user = @logged_user
+    render :action => :edit
   end
   
   def update
