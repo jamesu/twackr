@@ -60,7 +60,7 @@ class SessionsController < ApplicationController
       new_cookie_flag = (params[:remember_me] == "1")
       handle_remember_cookie! new_cookie_flag
       redirect_back_or_default('/')
-      error_status(false, :login_success)
+      error_status(false, 'response.login_success')
     else
       note_failed_signin
       @login       = params[:email]
@@ -73,7 +73,7 @@ class SessionsController < ApplicationController
 
   def destroy
     logout_killing_session!
-    error_status(false, :logout_success)
+    error_status(false, 'response.login_success')
     
     respond_to do |f|
       f.html {redirect_back_or_default('/')}
@@ -84,7 +84,7 @@ class SessionsController < ApplicationController
 protected
   # Track failed login attempts
   def note_failed_signin
-    error_status(true, :login_failure, {}, false)
+    error_status(true, 'response.login_failure', {}, false)
     logger.warn "Failed login for '#{params[:email]}' from #{request.remote_ip} at #{Time.now.utc}"
   end
   
