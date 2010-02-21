@@ -40,7 +40,7 @@ class UsersController < ApplicationController
         @user.save
         
         self.current_user = @user
-        f.html{ flash.now[:info] = "Saved!"; redirect_to(projects_path) }
+        f.html{ flash.now[:info] = t('response.saved'); redirect_to(projects_path) }
       else  
         f.html{ flash.now[:error] = "Error saving!"; render :new }
       end
@@ -58,9 +58,9 @@ class UsersController < ApplicationController
   def update
     respond_to do |f|
       if @user.update_attributes(params[:user])
-        f.html{ flash.now[:info] = "Saved!"; redirect_to(root_path) }
+        f.html{ flash.now[:info] = t('response.saved'); redirect_to(root_path) }
       else
-        f.html{ flash.now[:info] = "Error!"; render :edit }
+        f.html{ flash.now[:info] = t('response.error'); render :edit }
       end
     end
   end
@@ -89,7 +89,7 @@ private
       @user = User.find(params[:id])
     rescue
       respond_to do |f|
-        f.html { flash[:error] = "Invalid user!"  }
+        f.html { flash[:error] = t('response.invalid_user')  }
       end
       
       return false
@@ -101,7 +101,7 @@ private
   def check_edit?
     unless @logged_user.admin or @logged_user == @user
       respond_to do |f|
-        f.html{ flash[:error] = "Invalid user!"; redirect_to '/' }
+        f.html{ flash[:error] = t('response.invalid_user'); redirect_to '/' }
       end
       return false
     end

@@ -2,4 +2,4 @@
 - form_for @client do |f|
   = error_messages_for :client
   = render :partial => 'fields', :locals => {:f => f}
-  = f.submit "Update"
+  = f.submit t('clients.update')

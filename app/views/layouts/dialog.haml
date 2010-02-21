@@ -19,6 +19,9 @@
     = javascript_tag "var PAGE_READONLY = true; var PAGE_ID = null;"
   %body
     #dialog
-      %h1= h @page_title
+      - if @page_title
+        %h1= h @page_title
+      - else
+        %img{:src => "/images/twackr.png", :alt => "Twackr"}
       = status_bar
       != yield

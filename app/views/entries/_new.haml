@@ -5,9 +5,9 @@
     - unless service.nil?
       = hidden_field_tag 'entry[service_id]', service.id
     - if !project.nil?
-      = f.label :content, "What are you doing in #{entry_project_tag(project.tag)}?"
+      = f.label :content, t('entries.what_in_project', :project => entry_project_tag(project.tag))
     - elsif !service.nil?
-      = f.label :content, "What #{entry_service_tag(service.tag)} are you working on?"
+      = f.label :content, t('entries.what_in_service', :service => entry_service_tag(service.tag))
     - else
-      = f.label :content, "What are you doing? (<a href=\"/taglist.html\" target=\"_blank\">Help?</a>)"
+      = f.label :content, t('entries.what_status')
     = f.text_field :content

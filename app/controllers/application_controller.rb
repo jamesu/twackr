@@ -49,7 +49,7 @@ protected
       @project = @logged_user.projects.find(params[:project_id])
     rescue
       respond_to do |f|
-        f.html { flash[:error] = "Invalid project!"  }
+        f.html { flash[:error] = t('response.invalid_project')  }
       end
     
       return false

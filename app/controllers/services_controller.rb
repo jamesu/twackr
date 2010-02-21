@@ -18,9 +18,9 @@ class ServicesController < ApplicationController
     
     respond_to do |f|
       if @service.save
-        f.html{ flash.now[:info] = "Created!"; redirect_to(services_path) }
+        f.html{ redirect_to(services_path) }
       else
-        f.html{ flash.now[:info] = "Error!"; render :new }
+        f.html{ flash.now[:info] = t('response.error'); render :new }
       end
     end
   end
@@ -31,9 +31,9 @@ class ServicesController < ApplicationController
   def update
     respond_to do |f|
       if @service.update_attributes(params[:service])
-        f.html{ flash.now[:info] = "Saved!"; redirect_to(services_path) }
+        f.html{ flash.now[:info] = t('response.saved'); redirect_to(services_path) }
       else
-        f.html{ flash.now[:info] = "Error!"; render :edit }
+        f.html{ flash.now[:info] = t('response.error'); render :edit }
       end
     end
   end
@@ -70,7 +70,7 @@ private
       @service = @logged_user.services.find(params[:id])
     rescue
       respond_to do |f|
-        f.html { flash[:error] = "Invalid service!"  }
+        f.html { flash[:error] = t('response.invalid_service')  }
       end
 
       return false

@@ -7,21 +7,21 @@ render_tabnav :tabsWrapper do
 
   add_tab do |t|
     t.named "..."
-    t.titled "List"
+    t.titled t('tabs.list')
     t.highlights_on @project.nil? && @entries.nil?
     t.links_to projects_path
   end
 
   add_tab do |t|
     t.named "All"
-    t.titled "All"
+    t.titled t('tabs.all')
     t.links_to entries_projects_path
     t.highlights_on @project.nil? && @entries
   end
 
   add_tab do |t|
     t.named "+"
-    t.titled "Add New"
+    t.titled t('tabs.add')
     t.links_to new_project_path
     t.highlights_on @project && @project.new_record?
   end
@@ -30,7 +30,7 @@ render_tabnav :tabsWrapper do
 	next if project.new_record?
     add_tab do |t|
       t.named project.name
-      t.titled "Go to #{project.name}"
+      t.titled  t('tabs.go_to', :target => project.name)
       t.links_to project_path(project)
       t.highlights_on @project == project
     end

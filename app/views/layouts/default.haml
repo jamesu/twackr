@@ -27,11 +27,11 @@
       -# Top of page (tabs, user box, etc)
       #header
         .topCrumbs
-          = link_to "Projects", projects_path, :class => (controller.class == ProjectsController ? 'active' : nil)
-          = link_to "Clients", clients_path,   :class => (controller.class == ClientsController ? 'active' : nil)
-          = link_to "Services", services_path, :class => (controller.class == ServicesController ? 'active' : nil)
-          = link_to "Account", '/settings',    :class => (controller.class == UsersController ? 'active' : nil)
-          = link_to_remote "Logout", :url => logout_path, :method => :destroy
+          = link_to t('nav.projects'), projects_path, :class => (controller.class == ProjectsController ? 'active' : nil)
+          = link_to t('nav.clients'), clients_path,   :class => (controller.class == ClientsController ? 'active' : nil)
+          = link_to t('nav.services'), services_path, :class => (controller.class == ServicesController ? 'active' : nil)
+          = link_to t('nav.account'), '/settings',    :class => (controller.class == UsersController ? 'active' : nil)
+          = link_to_remote t('nav.logout'), :url => logout_path, :method => :destroy
         = navigation_for_page
         .clear
       

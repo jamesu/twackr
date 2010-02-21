@@ -18,9 +18,9 @@ class ClientsController < ApplicationController
     
     respond_to do |f|
       if @client.save
-        f.html{ flash.now[:info] = "Created!"; redirect_to(clients_path) }
+        f.html{ redirect_to(clients_path) }
       else
-        f.html{ flash.now[:info] = "Error!"; render :new }
+        f.html{ flash.now[:info] = t('response.error'); render :new }
       end
     end
   end
@@ -31,9 +31,9 @@ class ClientsController < ApplicationController
   def update
     respond_to do |f|
       if @client.update_attributes(params[:client])
-        f.html{ flash.now[:info] = "Saved!"; redirect_to(clients_path) }
+        f.html{ flash.now[:info] = t('response.saved'); redirect_to(clients_path) }
       else
-        f.html{ flash.now[:info] = "Error!"; render :edit }
+        f.html{ flash.now[:info] = t('response.error'); render :edit }
       end
     end
   end
@@ -41,7 +41,7 @@ class ClientsController < ApplicationController
   def destroy
     respond_to do |f|
       if @client.is_default_project?
-        f.html { flash[:error] = "Client is default"; redirect_to clients_path }
+        f.html { flash[:error] = t('response.client_default'); redirect_to clients_path }
       else
         @client.destroy
         f.html { redirect_to clients_path }

@@ -1,20 +1,18 @@
-- @page_title = "Login"
-
 - form_tag session_path do
   #normal_login.inner{:style => 'display:block'}
     #loginUsernameField
-      %label{:for => 'loginUsername'}= "Username"
+      %label{:for => 'loginUsername'}= t('sessions.username')
       != text_field_tag 'email', @email, :size => 30, :id => 'loginUsername', :class => 'medium'
     #loginPasswordField
-      %label{:for => 'loginPassword'}= "Password"
+      %label{:for => 'loginPassword'}= t('sessions.password')
       != password_field_tag 'password', nil, :size => 30, :id => 'loginPassword', :class => 'medium'
     #loginCustom
       = check_box_tag 'remember_me', '1', @remember_me
-      %label.checkbox{:for => 'loginRememberMe'}= "Remember me"
+      %label.checkbox{:for => 'loginRememberMe'}= t('sessions.remember_me')
       %div
-        != link_to "Register New Account" , :controller => 'users', :action => 'new'
+        != link_to t('sessions.register_account') , :controller => 'users', :action => 'new'
   
   #dialogSubmit
-    %button.submit{:type => 'submit'}= "Login"
+    %button.submit{:type => 'submit'}= t('sessions.login')
     
   

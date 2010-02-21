@@ -1,7 +1,7 @@
-- @page_title = "Settings"
+- @page_title = t('title.settings')
 - form_for @user do |f|
   = error_messages_for :user
   = render :partial => 'fields', :locals => {:f => f}
-  = f.submit "Update"
+  = f.submit t('users.update')
   %span="or"
-  = link_to_remote "Delete", :url => user_path(@user), :method => :delete, :confirm => "Are you sure?"
+  = link_to_remote t('users.delete'), :url => user_path(@user), :method => :delete, :confirm => t('users.delete_confirm')

@@ -1,6 +1,6 @@
 .client{:id => "client_#{client.id}"}
   .actions
-    = link_to "Edit", edit_client_path(client)
+    = link_to t('actions.edit'), edit_client_path(client)
   .clientName
     = h client.name
   .clientProjects

@@ -7,14 +7,14 @@ render_tabnav :tabsWrapper do
 
   add_tab do |t|
     t.named "..."
-    t.titled "List"
+    t.titled t('tabs.list')
     t.highlights_on @service.nil?
     t.links_to services_path
   end
 
   add_tab do |t|
     t.named "+"
-    t.titled "Add New"
+    t.titled t('tabs.add')
     t.links_to new_service_path
     t.highlights_on @service && @service.new_record?
   end
@@ -23,7 +23,7 @@ render_tabnav :tabsWrapper do
 	next if service.new_record?
     add_tab do |t|
       t.named service.name
-      t.titled "Go to #{service.name}"
+      t.titled t('tabs.go_to', :target => service.name)
       t.links_to service_path(service)
       t.highlights_on @service == service
     end

@@ -1,5 +1,5 @@
-- @page_title = "Settings"
-%h2= "User #{h @user.email}"
+- @page_title = t('title.settings')
+%h2= t('title.user', :target => h(@user.email))
 
 #user
-	= link_to_remote "Delete", :url => user_path(@user), :method => :delete
+	= link_to_remote t('users.delete'), :url => user_path(@user), :method => :delete

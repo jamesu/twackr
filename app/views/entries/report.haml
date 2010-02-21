@@ -1,6 +1,5 @@
-- @page_title = "Reports"
-%h2= "Reports"
-= @sum_range_list.map{}
+- @page_title = t('title.reports')
+%h2= t('title.reports')
 
 %h3= "Money earned"
 = entry_bar_report('entry_money', @summed_rates.map{|r|r[1]}, @sum_range_list)

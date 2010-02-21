@@ -1,9 +1,9 @@
 %div
-  = label :name, "Name"
+  = label :name, t('projects.name')
   = f.text_field :name
 %div
-  = label :tag, "Shorthand Tag"
+  = label :tag, t('projects.tag')
   = f.text_field :tag
 %div
-  = label :client, "Client"
+  = label :client, t('projects.client')
   = f.select 'client_id', client_select_fields(@project.new_record? ? @logged_user : @project.user)

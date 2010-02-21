@@ -25,9 +25,9 @@ class ProjectsController < ApplicationController
     
     respond_to do |f|
       if @project.save
-        f.html{ flash.now[:info] = "Created!"; redirect_to(projects_path) }
+        f.html{ redirect_to(projects_path) }
       else
-        f.html{ flash.now[:info] = "Error!"; render :new }
+        f.html{ flash.now[:info] = t('response.error'); render :new }
       end
     end
   end
@@ -38,9 +38,9 @@ class ProjectsController < ApplicationController
   def update
     respond_to do |f|
       if @project.update_attributes(params[:project])
-        f.html{ flash.now[:info] = "Saved!"; redirect_to(projects_path) }
+        f.html{ flash.now[:info] = t('response.saved'); redirect_to(projects_path) }
       else
-        f.html{ flash.now[:info] = "Error!"; render :edit }
+        f.html{ flash.now[:info] = t('response.error'); render :edit }
       end
     end
   end
@@ -48,7 +48,7 @@ class ProjectsController < ApplicationController
   def destroy
     respond_to do |f|
       if @project.is_default_project?
-        f.html { flash[:error] = "Project is default"; redirect_to projects_path }
+        f.html { flash[:error] = t('response.project_default'); redirect_to projects_path }
       else
         @project.destroy
         f.html { redirect_to projects_path }
@@ -81,7 +81,7 @@ private
       @project = @logged_user.projects.find(params[:id])
     rescue
       respond_to do |f|
-        f.html { flash[:error] = "Invalid project!"  }
+        f.html { flash[:error] = t('response.invalid_project')  }
       end
 
       return false

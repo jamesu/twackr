@@ -17,10 +17,10 @@ class EntriesController < ApplicationController
     
     respond_to do |f|
       if @entry.save
-        f.html{ flash.now[:info] = "Created!"; redirect_to(entries_path) }
+        f.html{ redirect_to(entries_path) }
         f.js {}
       else
-        f.html{ flash.now[:info] = "Error!"; render :action => :new }
+        f.html{ flash.now[:info] = t('response.error'); render :action => :new }
       end
     end
   end
@@ -31,10 +31,10 @@ class EntriesController < ApplicationController
   def update
     respond_to do |f|
       if @entry.update_attributes(params[:entry])
-        f.html{ flash.now[:info] = "Saved!"; redirect_to(entries_path) }
+        f.html{ flash.now[:info] = t('response.saved'); redirect_to(entries_path) }
         f.js {}
       else
-        f.html{ flash.now[:info] = "Error!"; render :action => :edit }
+        f.html{ flash.now[:info] = t('response.error'); render :action => :edit }
       end
     end
   end
@@ -46,10 +46,10 @@ class EntriesController < ApplicationController
     
     respond_to do |f|
       if @entry.save
-        f.html{ flash.now[:info] = "Cloned!"; redirect_to(entries_path) }
+        f.html{ flash.now[:info] = t('response.entry_cloned'); redirect_to(entries_path) }
         f.js { render :action => :create }
       else
-        f.html{ flash.now[:info] = "Error!"; render :action => :edit }
+        f.html{ flash.now[:info] = t('response.error'); render :action => :edit }
       end
     end
   end
@@ -59,10 +59,10 @@ class EntriesController < ApplicationController
     
     respond_to do |f|
       if @entry.save
-        f.html{ flash.now[:info] = "Terminated!"; redirect_to(entries_path) }
+        f.html{ flash.now[:info] = t('response.entry_terminated'); redirect_to(entries_path) }
         f.js { render :action => :update }
       else
-        f.html{ flash.now[:info] = "Error!"; render :action => :edit }
+        f.html{ flash.now[:info] = t('response.error'); render :action => :edit }
       end
     end
   end
@@ -160,7 +160,7 @@ private
       @entry = (@project || @logged_user).entries.find(params[:id])
     rescue
       respond_to do |f|
-        f.html { flash[:error] = "Invalid entry!"  }
+        f.html { flash[:error] = t('response.invalid_entry')  }
       end
     
       return false
