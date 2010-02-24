@@ -1,0 +1,10 @@
+@entries.each do |entry|
+  page.insert_html :before, "entries_more", :partial => 'entries/entry', :object => entry
+  page.call "Timer.register", entry.id unless entry.terminated?
+end
+
+if @entries.length < 25
+  page.remove "entries_more"
+else
+  page.replace "entries_more", :partial => 'entries/more', :locals => {:num => 25}
+end

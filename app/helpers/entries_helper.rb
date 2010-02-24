@@ -37,6 +37,19 @@ module EntriesHelper
     "<span class=\"service\">\##{tag}</span>"
   end
   
+  def more_entries_link(num, last_id)
+    path_name = if @project
+      project_path(@project, :last_id => last_id)
+    elsif @service
+      service_path(@service, :last_id => last_id)
+    elsif @projects
+      entries_projects_path(:last_id => last_id)
+    else
+      entries_path(:last_id => last_id)
+    end
+    link_to_remote t('.display_x_more_entries', :num => num), :url => path_name, :method => :get
+  end
+  
   def entry_bar_report(id, values, labels)
     js_labels = labels.map{|l| "'#{l}'"}
     "<div id=\"#{id}\" style=\"width:300px; height: 200px;\"></div>" +

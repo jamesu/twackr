@@ -10,9 +10,22 @@ class ProjectsController < ApplicationController
   
   def entries
     @projects = @logged_user.projects
-    @entries = @logged_user.entries.find(:all, :conditions => {:project_id => @logged_user.project_ids}, :order => 'start_date DESC')
+    last_id = (params[:last_id] || '0').to_i
+    conds = if last_id > 0
+      ['project_id IN (?) AND id < ?', @logged_user.project_ids, last_id]
+    else
+      ['project_id IN (?)', @logged_user.project_ids]
+    end
+    
+    @entries = @logged_user.entries.find(:all, 
+      :conditions => conds, 
+      :limit => 25, 
+      :order => 'start_date DESC')
+    @last_entry = @entries.length > 0 ? @entries[-1].id : 0
+    
     respond_to do |f|
       f.html {render 'entries/index'}
+      f.js {render 'entries/index'}
     end
   end
   
@@ -57,9 +70,16 @@ class ProjectsController < ApplicationController
   end
   
   def show
-    @entries = @project.entries
+    last_id = (params[:last_id] || '0').to_i
+    @entries = @project.entries.find(:all, 
+      :conditions => last_id > 0 ? ['id < ?', last_id] : {}, 
+      :limit => 25, 
+      :order => 'start_date DESC')
+    @last_entry = @entries.length > 0 ? @entries[-1].id : 0
+    
     respond_to do |f|
       f.html {render 'entries/index'}
+      f.js {render 'entries/index'}
     end
   end
   

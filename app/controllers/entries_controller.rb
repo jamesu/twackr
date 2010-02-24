@@ -4,7 +4,12 @@ class EntriesController < ApplicationController
   before_filter :find_entry, :except => [:index, :new, :create, :report]
   
   def index
-    @entries = (@project || @logged_user).entries.find(:all)
+    last_id = (params[:last_id] || '0').to_i
+    @entries = (@project || @logged_user).entries.find(:all, 
+      :conditions => last_id > 0 ? ['id < ?', last_id] : {}, 
+      :limit => 25, 
+      :order => 'start_date DESC')
+    @last_entry = @entries.length > 0 ? @entries[-1].id : 0
   end
   
   def new

@@ -46,9 +46,16 @@ class ServicesController < ApplicationController
   end
   
   def show
-    @entries = @service.entries
+    last_id = (params[:last_id] || '0').to_i
+    @entries = @service.entries.find(:all, 
+      :conditions => last_id > 0 ? ['id < ?', last_id] : {}, 
+      :limit => 25, 
+      :order => 'start_date DESC')
+    @last_entry = @entries.length > 0 ? @entries[-1].id : 0
+    
     respond_to do |f|
       f.html {render 'entries/index'}
+      f.js {render 'entries/index'}
     end
   end
 
