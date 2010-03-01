@@ -1,4 +1,9 @@
+last_entry_date = @prev_entry.nil? ? nil : @prev_entry.date
 @entries.each do |entry|
+  if entry.date != last_entry_date
+    page.insert_html :before, "entries_more", :partial => 'entries/header', :locals => {:date => last_entry_date}
+    last_entry_date = entry.date
+  end
   page.insert_html :before, "entries_more", :partial => 'entries/entry', :object => entry
   page.call "Timer.register", entry.id unless entry.terminated?
 end

@@ -9,7 +9,10 @@
 = new_entry_form(@project, @client, @service)
 
 #entries
-  = render :partial => 'entries/entry', :collection => @entries
+  - groups = make_entry_groups(@entries)
+  - groups.each do |group|
+    = render :partial => 'entries/header', :locals => {:date => group[0]}
+    = render :partial => 'entries/entry', :collection => group[1]
   - if @entries.length >= 25
     = render :partial => 'entries/more', :locals => {:num => 25}
 

@@ -29,6 +29,21 @@ module EntriesHelper
     end
   end
   
+  def make_entry_groups(entries)
+    today = @time_now.to_date
+    list = entries.group_by(&:date).map do |date,values|
+      name = if date == today
+        t('entries.date_today')
+      elsif date.year == today.year
+        date.strftime t('entries.date_format')
+      else
+        date.strftime t('entries.date_format_extended')
+      end
+      [name, values]
+    end
+    list
+  end
+  
   def entry_project_tag(tag)
     "<span class=\"project\">\@#{tag}</span>"
   end

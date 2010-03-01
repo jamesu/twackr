@@ -154,6 +154,10 @@ class Entry < ActiveRecord::Base
     self.current_time > self.seconds_limit
   end
   
+  def date
+    self.start_date.to_date
+  end
+  
   def hours
     (self.seconds || 0) / 60.0 / 60.0
   end

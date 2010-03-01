@@ -5,6 +5,7 @@ class EntriesController < ApplicationController
   
   def index
     last_id = (params[:last_id] || '0').to_i
+    @prev_entry = last_id != 0 ? @logged_user.entries.find_by_id(last_id) : nil
     @entries = (@project || @logged_user).entries.find(:all, 
       :conditions => last_id > 0 ? ['id < ?', last_id] : {}, 
       :limit => 25, 
