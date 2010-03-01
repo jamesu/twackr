@@ -102,7 +102,7 @@ class EntriesController < ApplicationController
       end
     else
       day_list = make_time_list(now - 1.week + 1, now) {|d| d.cwday}
-      daymap = [", ""Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
+      daymap = ["", "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
       @grouped_entries = @logged_user.entries.reject(&days_past_week).group_by do |entry|
         entry.start_date.to_date.cwday
       end
