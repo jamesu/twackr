@@ -6,6 +6,12 @@ module EntriesHelper
       :entry => Entry.new }
   end
   
+  def entry_form_for(entry)
+    remote_form_for entry,
+      :id => "entry_#{entry.id}_form",
+      &proc
+  end
+  
   def entry_tag(type, value)
     "<div class=\"#{type}\">#{value.escape_html}</div>"
   end

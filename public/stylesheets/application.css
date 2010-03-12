@@ -386,3 +386,7 @@ span.time {
 	padding-left: 2px;
 	padding-right: 2px;
 }
+
+form .formActions {
+	text-align: right;
+}

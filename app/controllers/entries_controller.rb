@@ -32,6 +32,9 @@ class EntriesController < ApplicationController
   end
   
   def edit
+    respond_to do |f|
+      f.js {}
+    end
   end
   
   def update
@@ -41,6 +44,7 @@ class EntriesController < ApplicationController
         f.js {}
       else
         f.html{ flash.now[:info] = t('response.error'); render :action => :edit }
+        f.js {}
       end
     end
   end
@@ -61,6 +65,7 @@ class EntriesController < ApplicationController
   end
   
   def terminate
+    @entry.quick_update = true
     @entry.terminate
     
     respond_to do |f|
@@ -83,6 +88,9 @@ class EntriesController < ApplicationController
   end
   
   def show
+    respond_to do |f|
+      f.js { render :action => :update }
+    end
   end
   
   def report

@@ -4,8 +4,11 @@ class Entry < ActiveRecord::Base
   belongs_to :service
   
   before_create :check_entry
+  before_update :check_entry_update
   
   attr_accessible :content, :service_id, :project_id
+  
+  attr_accessor :quick_update
   
   def start(started_at=nil)
     self.start_date = started_at || Time.now
@@ -20,9 +23,14 @@ class Entry < ActiveRecord::Base
   TIMEVAL_UNIT_REGEXP = /[0-9]+[sSHhMm]/
   TAG_REGEXP = /[#\@][a-zA-Z0-9\-_]*/
   
-  def format_entry
+  def format_entry(origin_base=nil)
     found_service = nil
     found_project = nil
+    time_now = Time.now
+    
+    if origin_base
+      time_now = origin_base
+    end
 
     gen = content.gsub(TAG_REGEXP) do |tag|
       is_project = tag[0...1] == '@' and found_project.nil?
@@ -79,16 +87,16 @@ class Entry < ActiveRecord::Base
       # Determine start
       if delta_inc
         # will be spending x time on it
-        found_start = Time.now
+        found_start = time_now
         found_done = in_progress ? nil : found_start + delta_s
       elsif delta_dec
         # spent x time on it already
-        last_ended = Time.now
+        last_ended = time_now
         found_done = in_progress ? nil : last_ended
         found_start = last_ended - delta_s
       else
         # expecting to spend x time on it [not confirmed]
-        found_start = Time.now
+        found_start = time_now
         found_done = nil
         found_limit = delta_s
       end
@@ -97,12 +105,17 @@ class Entry < ActiveRecord::Base
     end
     
     self.content_html = gen
-    {:service => found_service, :project => found_project, :start_date => found_start, :done_date => found_done, :limit => found_limit}
+    { :service => found_service, 
+      :project => found_project, 
+      :start_date => found_start, 
+      :done_date => found_done,
+      :limit => found_limit,
+      :origin_time => time_now }
   end
   
   def check_entry
     built = format_entry
-    
+    self.original_start = built[:origin_time]
     
     self.service = built[:service] if built[:service]
     self.project = built[:project] if built[:project]
@@ -115,6 +128,28 @@ class Entry < ActiveRecord::Base
     
     self.seconds = current_time unless self.done_date.nil?
     self.start if self.start_date.nil?
+  end
+  
+  def check_entry_update
+    unless @quick_update
+      # Like check_entry, except we maintain start_date
+      # We also maintain done_date unless it was specified
+      # in the content
+      built = format_entry(self.original_start)
+      
+      self.service = built[:service] if built[:service]
+      self.project = built[:project] if built[:project]
+      self.service ||= self.user.default_service
+      self.project ||= self.user.default_project
+      
+      unless self.original_start.nil?
+        self.start_date = built[:start_date]
+        self.done_date ||= built[:done_date]
+        self.seconds_limit = built[:limit]
+      end
+    end
+    
+    self.seconds = current_time unless self.done_date.nil?
   end
   
   def terminate

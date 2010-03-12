@@ -1,5 +1,6 @@
 .entry{:id => "entry_#{entry.id}"}
-  .actions
+  .actions	
+    = link_to_remote t('actions.edit'), :url => edit_entry_path(entry), :method => :get
     - unless entry.terminated?
       = link_to_remote t('actions.finish'), :url => terminate_entry_path(entry), :method => :put
   .entryContent{:class => entry.is_overdue? ? 'overdue' : nil}= entry.content_html

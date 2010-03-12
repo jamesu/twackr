@@ -63,6 +63,11 @@ en:
     what_status: "What are you doing? (<a href=\"/taglist.html\" target=\"_blank\">Help?</a>)"
     more:
       display_x_more_entries: "Display {{num}} more entries"
+    edit:
+      submit: Update
+      or: or
+      remove: Delete
+      cancel: Cancel
   projects:
     create: Create
     update: Update

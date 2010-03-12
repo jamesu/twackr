@@ -1,0 +1,2 @@
+page.call "Timer.remove", @entry.id
+page.replace "entry_#{@entry.id}", :partial => 'edit', :locals => {:entry => @entry}

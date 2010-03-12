@@ -1,0 +1,9 @@
+.entry{:id => "entry_#{entry.id}"}
+  - entry_form_for entry do |f| 
+    = f.text_field :content
+    .formActions
+      = f.submit t('.submit')
+      = t('.or')
+      = link_to_remote t('.remove'), :url => entry_path(entry), :method => :delete
+      = t('.or')
+      = link_to_remote t('.cancel'), :url => entry_path(entry), :method => :get

@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20100125103357) do
     t.integer  "service_id"
     t.integer  "project_id"
     t.integer  "user_id"
+    t.datetime "original_start",:default => nil # time which all deltas were calculated from
     t.datetime "start_date",    :default => nil
     t.datetime "done_date",     :default => nil
     t.integer  "seconds",       :default => 0
