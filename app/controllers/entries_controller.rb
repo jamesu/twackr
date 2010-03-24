@@ -95,25 +95,27 @@ class EntriesController < ApplicationController
   
   def report
     now = params[:date] ? Date.parse(params[:date]) : Time.now.to_date
+    now_t = now.to_time
     report_period = params[:period]
     report_year = now.year
     
-    days_past_week  = Proc.new {|entry| (now - entry.date) > 7.days}
-    days_past_month = Proc.new {|entry| (now - entry.date) > 1.month}
+    days_past_week  = Proc.new {|entry| d=(now - entry.date); d < 0 || d > 6}
+    days_past_period  = Proc.new {|entry| d=(now - entry.date); d < 0 || d > 5*7}
     days_this_year  = Proc.new {|entry| now.year != entry.year}
     
     case report_period
     when 'week'
-      day_list = make_time_list(now - 1.month + 1, now) {|d| d.cweek}.uniq
+      day_list = make_time_list(now - (5*7) + 1, now) {|d| d.cweek}.uniq
       daymap = {}
       day_list.each{|d| daymap[d] = d }
-      @grouped_entries = @logged_user.entries.reject(&days_past_month).group_by do |entry|
+      @grouped_entries = @logged_user.entries.reject(&days_past_period).group_by do |entry|
         entry.date.cweek
       end
     else
       day_list = make_time_list(now - 1.week + 1, now) {|d| d.cwday}.uniq
-      daymap = ["", "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
+      daymap = ["", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"]
       @grouped_entries = @logged_user.entries.reject(&days_past_week).group_by do |entry|
+        #puts "GROUP #{entry.date} #{entry.date.cwday} -> #{entry.hours}"
         entry.date.cwday
       end
     end
