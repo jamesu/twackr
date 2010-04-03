@@ -1,1 +1,5 @@
-%h3= date.to_s
+- sum = quicksum_entries(entries)
+%h3.date{:id => "header_#{date.to_s}", :sum_time => sum}
+  = date_s
+  - unless entries.empty? 
+    %span.time_sum= friendly_time(sum)

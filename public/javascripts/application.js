@@ -76,22 +76,47 @@ Timer = {
 	tick: function() {
 		var now = Date.now();
 		Timer.instances.values().forEach(function(inst) {
-			var delta_s = (now - inst[1]) / 1000;
-			var delta_m = delta_s / 60.0;
-			var delta_h = Math.floor(delta_m / 60.0);
-			
-			delta_m = Math.floor(delta_m - (delta_h * 60.0));
-			
-			var delta_desc = "";
-			if (delta_h < 1.0) {
-				if (delta_m < 1.0)
-					delta_desc = delta_s + "S";
-				else
-					delta_desc = delta_m + "M";
-			} else {
-				delta_desc = delta_h + "H" + delta_m + "M";
-			}
+			var delta_s = Math.floor((now - inst[1]) / 1000);
+			var delta_desc = Timer.friendlyTime(delta_s);
 			inst[0].innerHTML = delta_desc;
 		});
+	},
+	
+	updateDate: function(date_s) {
+		var header = $('header_' + date_s);
+		if (header) {
+			var cur = header.next();
+			var sum = 0;
+			while (cur) {
+				if (!cur.hasClassName('entry'))
+					break;
+				
+				var time = parseInt(cur.readAttribute('times'));
+				sum += time;
+				cur = cur.next();
+			}
+			
+			var span = header.down('span');
+			if (span) {
+				span.innerHTML = Timer.friendlyTime(sum);
+			}
+		}
+	},
+	
+	friendlyTime: function(seconds) {
+		var minutes = seconds / 60.0;
+		var hours = minutes / 60.0;
+		hours = Math.floor(hours);
+		var minutes = Math.floor(minutes - (hours * 60.0));
+		
+		if (hours < 1.0) {
+			if (minutes < 1)
+				return seconds + "S";
+			else
+				return minutes + "M";
+		} else {
+			return hours + "H" + minutes + "M";
+		}
 	}
 };
+

@@ -11,7 +11,7 @@
 #entries
   - groups = make_entry_groups(@entries)
   - groups.each do |group|
-    = render :partial => 'entries/header', :locals => {:date => group[0]}
+    = entries_header(group[0], group[1], group[2])
     = render :partial => 'entries/entry', :collection => group[1]
   - if @entries.length >= 25
     = render :partial => 'entries/more', :locals => {:num => 25}

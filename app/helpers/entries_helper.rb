@@ -45,7 +45,7 @@ module EntriesHelper
       else
         date.strftime t('entries.date_format_extended')
       end
-      [name, values]
+      [name, values, date]
     end
     list
   end
@@ -56,6 +56,19 @@ module EntriesHelper
   
   def entry_service_tag(tag)
     "<span class=\"service\">\##{tag}</span>"
+  end
+  
+  def quicksum_entries(entries)
+    count = 0
+    entries.each do |entry|
+      count += entry.current_time
+    end
+    count
+  end
+  
+  def entries_header(date_s, entries, date)
+    list = @date_now == date ? [] : entries
+    render :partial => 'entries/header', :locals => {:date_s => date_s, :entries => list, :date => date}
   end
   
   def more_entries_link(num, last_id)

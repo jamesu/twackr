@@ -364,7 +364,7 @@ span.project, span.project_ph {
 span.service, span.service_ph {
 	color: #fff;
 	font-weight: bold;
-	background-color: rgb(255,150,20);	
+	background-color: rgb(255,150,20);
 	border: 1px solid rgb(255,150,20);
 	-webkit-border-radius: 6px;
 	padding-left: 2px;
@@ -385,6 +385,15 @@ span.time {
 	-webkit-border-radius: 6px;
 	padding-left: 2px;
 	padding-right: 2px;
+}
+
+h3 span.time_sum {
+	float: right;
+	font-size: 11px;
+	color: rgb(150,150,150);
+	margin-top: 2px;
+	border: 1px solid rgb(200,200,200);
+	-webkit-border-radius: 3px;
 }
 
 form .formActions {

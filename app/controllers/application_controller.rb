@@ -42,6 +42,7 @@ protected
   def set_time_zone
     Time.zone = @logged_user.timezone if @logged_user
     @time_now = Time.zone.now
+    @date_now = @time_now.to_date
   end
   
   def find_project
