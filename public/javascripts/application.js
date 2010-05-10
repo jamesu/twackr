@@ -43,6 +43,31 @@ Report = {
   }	
 };
 
+// source: http://anentropic.wordpress.com/2009/06/25/javascript-iso8601-parser-and-pretty-dates/
+function parseISO8601(str) {
+ // we assume str is a UTC date ending in 'Z'
+
+ var parts = str.split('T'),
+ dateParts = parts[0].split('-'),
+ timeParts = parts[1].split('Z'),
+ timeSubParts = timeParts[0].split(':'),
+ timeSecParts = timeSubParts[2].split('.'),
+ timeHours = Number(timeSubParts[0]),
+ _date = new Date;
+
+ _date.setUTCFullYear(Number(dateParts[0]));
+ _date.setUTCMonth(Number(dateParts[1])-1);
+ _date.setUTCDate(Number(dateParts[2]));
+ _date.setUTCHours(Number(timeHours));
+ _date.setUTCMinutes(Number(timeSubParts[1]));
+ _date.setUTCSeconds(Number(timeSecParts[0]));
+ if (timeSecParts[1]) _date.setUTCMilliseconds(Number(timeSecParts[1]));
+
+ // by using setUTC methods the date has already been converted to local time(?)
+ return _date;
+}
+
+
 Timer = {
 	instances: null,
 	
@@ -55,7 +80,8 @@ Timer = {
 		var el = $('entry_' + id);
 		var time = el.down('.entryTime');
 		var start = time.readAttribute('start_date');
-		this.instances.set(id, [time, Date.parse(start)]);
+		var start_ms = parseISO8601(start).getTime();
+		this.instances.set(id, [time, start_ms]);//Date.parse(start)]);
 	},
 	
 	restart: function(id) {
@@ -119,4 +145,3 @@ Timer = {
 		}
 	}
 };
-
