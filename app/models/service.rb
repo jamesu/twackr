@@ -6,8 +6,9 @@ class Service < ActiveRecord::Base
   
   attr :inherit_rate
   attr_accessible :name, :tag, :rate, :inherit_rate
+  after_initialize :set_inherit
   
-  def after_initialize
+  def set_inherit
     @inherit_rate = true
   end
   

@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   include Authentication
-  #include Authentication::ByPassword
   include Authentication::ByCookieToken
   
   has_many :projects,  :dependent => :destroy
@@ -14,7 +13,9 @@ class User < ActiveRecord::Base
   
   attr_accessible :email, :password, :password_confirmation, :timezone, :rate
   
-  def before_create
+  before_create :set_timezone
+  
+  def set_timezone
     self.timezone ||= "UTC"
   end
   
