@@ -2,16 +2,16 @@ module TabnavHelper
   protected 
 
   def tabnav(name, &block)
-    html = capture { render :partial => "shared/#{name}" }
+    html = capture { render "shared/#{name}" }
     if block_given?
       options = {:id => @_tabnav.html[:id] + '_content', :class => @_tabnav.html[:class] + '_content'}
       html << tag('div', options, true)
       html << capture(&block)
       html << '</div>' 
-      concat(html)
+      out html
       nil # avoid duplication if called with <%= %>
     else
-      return html
+      html
     end
   end
 
@@ -35,9 +35,9 @@ module TabnavHelper
   end
   
   def controller_names
-    files = Dir.entries(File.join(RAILS_ROOT, 'app/controllers'))
+    files = Dir.entries(File.join(Rails.root, 'app/controllers'))
     controllers = files.select {|x| x.match '_controller.rb'}
-    return controllers.map {|x| x.sub '_controller.rb', ''}.sort
+    controllers.map {|x| x.sub '_controller.rb', ''}.sort
   end
 
   private
@@ -48,9 +48,11 @@ module TabnavHelper
     @_tabnav.tabs.each do |tab|
 
       if tab.disabled?
-        tab.html[:class] = 'disabled'
+        tab.html[:class] ||= ""
+        tab.html[:class] += ' disabled'
       elsif tab.highlighted?(params)
-        tab.html[:class] = 'active'
+        tab.html[:class] ||= ""
+        tab.html[:class] += ' active'
       end
 
       li_options = {} 
@@ -62,6 +64,7 @@ module TabnavHelper
       if tab.html[:li_class]      
         li_options[:class] = tab.html[:li_class] 
       end
+      tab.html.delete(:li_class)
         
       if tab.html[:li_end]
         tag_end = tab.html[:li_end]
@@ -88,6 +91,6 @@ module TabnavHelper
   end
 
   def out(string)
-    concat string
+    concat string.html_safe
   end
 end
