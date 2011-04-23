@@ -1,9 +1,9 @@
 .entry{:id => "entry_#{entry.id}", :times => entry.current_time.floor}
   .actions	
-    = link_to_remote t('actions.edit'), :url => edit_entry_path(entry), :method => :get
+    = link_to t('actions.edit'), :url => edit_entry_path(entry), :method => :get, :remote => true
     - unless entry.terminated?
-      = link_to_remote t('actions.finish'), :url => terminate_entry_path(entry), :method => :put
-  .entryContent{:class => entry.is_overdue? ? 'overdue' : nil}= entry.content_html
+      = link_to t('actions.finish'), :url => terminate_entry_path(entry), :method => :put, :remote => true
+  .entryContent{:class => entry.is_overdue? ? 'overdue' : nil}= raw entry.content_html
   .entryTime{:class => entry.terminated? ? 'done' : 'active', :start_date => entry.start_date.utc.iso8601}= friendly_time(entry.current_time.floor)
   - if entry.done_date.nil?
     = javascript_tag "Timer.register(#{entry.id});"

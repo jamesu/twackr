@@ -7,13 +7,14 @@ module EntriesHelper
   end
   
   def entry_form_for(entry)
-    remote_form_for entry,
+    form_for entry,
       :id => "entry_#{entry.id}_form",
+      :remote => true,
       &proc
   end
   
   def entry_tag(type, value)
-    "<div class=\"#{type}\">#{value.escape_html}</div>"
+    "<div class=\"#{type}\">#{value.escape_html}</div>".html_safe
   end
   
   def friendly_time(seconds)
@@ -51,11 +52,11 @@ module EntriesHelper
   end
   
   def entry_project_tag(tag)
-    "<span class=\"project\">\@#{tag}</span>"
+    "<span class=\"project\">\@#{tag}</span>".html_safe
   end
   
   def entry_service_tag(tag)
-    "<span class=\"service\">\##{tag}</span>"
+    "<span class=\"service\">\##{tag}</span>".html_safe
   end
   
   def quicksum_entries(entries)
@@ -81,7 +82,7 @@ module EntriesHelper
     else
       entries_path(:last_id => last_id)
     end
-    link_to_remote t('.display_x_more_entries', :num => num), :url => path_name, :method => :get
+    link_to t('.display_x_more_entries', :num => num), :url => path_name, :remote => true, :method => :get
   end
   
   def entry_bar_report(id, values, labels)

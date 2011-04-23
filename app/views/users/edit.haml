@@ -4,4 +4,4 @@
   = render :partial => 'fields', :locals => {:f => f}
   = f.submit t('users.update')
   %span="or"
-  = link_to_remote t('users.delete'), :url => user_path(@user), :method => :delete, :confirm => t('users.delete_confirm')
+  = link_to t('users.delete'), :url => user_path(@user), :method => :delete, :confirm => t('users.delete_confirm'), :remote => true

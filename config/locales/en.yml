@@ -60,7 +60,7 @@ en:
     date_format_extended: "%a, %b %e %Y"
     what_in_project: "What are you doing in {{project}}?"
     what_in_service: "What {{service}} are you working on?"
-    what_status: "What are you doing? (<a href=\"/taglist.html\" target=\"_blank\">Help?</a>)"
+    what_status_html: "What are you doing? (<a href=\"/taglist.html\" target=\"_blank\">Help?</a>)"
     more:
       display_x_more_entries: "Display {{num}} more entries"
     edit:

@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-Wackr::Application.load_tasks
+Twackr::Application.load_tasks

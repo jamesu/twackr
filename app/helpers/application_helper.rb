@@ -6,7 +6,7 @@ module ApplicationHelper
     classes = flash_error ? 'flash error' : 'success'
     styles = flash_message.nil? ? '' : 'display:block' 
     
-    "<div id=\"statusBar\" class=\"#{classes}\" style=\"#{styles}\">#{h(flash_message)}</div>"
+    "<div id=\"statusBar\" class=\"#{classes}\" style=\"#{styles}\">#{h(flash_message)}</div>".html_safe
   end
   
   def if_authorized?(action, resource, &block)

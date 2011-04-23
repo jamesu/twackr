@@ -1,5 +1,5 @@
 #entryBox
-  - remote_form_for entry, :url => entries_path do |f|
+  - form_for entry, :url => entries_path, :remote => true do |f|
     - unless project.nil?
       = hidden_field_tag 'entry[project_id]', project.id
     - unless service.nil?
@@ -9,5 +9,5 @@
     - elsif !service.nil?
       = f.label :content, t('entries.what_in_service', :service => entry_service_tag(service.tag))
     - else
-      = f.label :content, t('entries.what_status')
+      = f.label :content, t('entries.what_status_html')
     = f.text_field :content

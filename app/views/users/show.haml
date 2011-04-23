@@ -2,4 +2,4 @@
 %h2= t('title.user', :target => h(@user.email))
 
 #user
-	= link_to_remote t('users.delete'), :url => user_path(@user), :method => :delete
+	= link_to t('users.delete'), :url => user_path(@user), :method => :delete, :remote => true

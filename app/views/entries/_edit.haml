@@ -4,6 +4,6 @@
     .formActions
       = f.submit t('.submit')
       = t('.or')
-      = link_to_remote t('.remove'), :url => entry_path(entry), :method => :delete
+      = link_to t('.remove'), :url => entry_path(entry), :method => :delete, :remote => true
       = t('.or')
-      = link_to_remote t('.cancel'), :url => entry_path(entry), :method => :get
+      = link_to t('.cancel'), :url => entry_path(entry), :method => :get, :remote => true
