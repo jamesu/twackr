@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 gem 'thin'
 gem 'pg'
 
-gem 'rails', '3.0.9'
+gem 'rails', '3.0.19'
 
 #gem 'sqlite3'
 
