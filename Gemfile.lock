@@ -36,7 +36,7 @@ GEM
     eventmachine (1.0.0)
     haml (3.0.25)
     i18n (0.5.0)
-    json (1.7.5)
+    json (1.7.6)
     mail (2.2.19)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -45,7 +45,7 @@ GEM
     mime-types (1.19)
     pg (0.14.1)
     polyglot (0.3.3)
-    rack (1.2.5)
+    rack (1.2.6)
     rack-mount (0.6.14)
       rack (>= 1.0.0)
     rack-test (0.5.7)
@@ -64,7 +64,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (~> 0.14.4)
-    rake (0.9.2.2)
+    rake (10.0.3)
     rdoc (3.12)
       json (~> 1.4)
     thin (1.5.0)
@@ -72,10 +72,10 @@ GEM
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
     thor (0.14.6)
-    treetop (1.4.11)
+    treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.34)
+    tzinfo (0.3.35)
 
 PLATFORMS
   ruby
