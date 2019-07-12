@@ -7,34 +7,14 @@ Tracked time can be categorised into @projects and #services. In addition to the
 
 ## How can i install / upgrade?
 
-Simply run the following:
+Simply run something like the following:
 
-    rake db:auto:migrate
-	script/server
+	export SESSION_SECRET=randomgarbagehere
+	export DATABASE_URL=sqlite3://db/my_database.sqlite3
+	rake db:migrate
+	rackup -p 9000
 
 And create a user. It couldn't be any simpler!
-
-## Are there any screenshots or is there even a demo?
-
-Please refer to the project entry on [OpenSourceRails] [3] for any screenshots.
-
-A demo is [available on heroku][4].
-
-## Can I run Twackr on Heroku?
-
-Yes you can! And this is how:
-
-1. Setup heroku app
-
-    heroku create
-
-2. Migrate database on heroku
-
-    heroku db:auto:migrate
-
-3. Launch in browser
-
-    heroku open
 
 ## Licensing
 
@@ -42,6 +22,4 @@ For licensing details, refer to the [LICENSE] [2] file in the root directory.
 
 [1]: http://www.twitter.com
 [2]: LICENSE
-[3]: http://www.opensourcerails.com
-[4]: http://twackr.heroku.com/
 
