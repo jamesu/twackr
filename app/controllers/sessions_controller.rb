@@ -24,21 +24,36 @@
 #++
 
 # This controller handles the login/logout function of the site.  
-class SessionsController < ApplicationController
-  layout 'dialog'
+module SessionsController
+  module Handlers
+  def new_session_handler
+    @login_token = params[:token]
+    if @login_token.nil?
+      haml :'sessions/new', :layout => :'layouts/dialog'
+    else
+      haml :'sessions/new_token', :layout => :'layouts/dialog'
+    end
+  end
+  def note_failed_signin
+    error_status(true, 'response.login_failure', {}, false)
+    logger.warn "Failed login for '#{params[:email]}' from #{request.ip} at #{Time.now.utc}"
+  end
+  end
+
+  def self.registered(app)
+
+  app.helpers SessionsController::Handlers
 
   # render new.rhtml
-  def new
-    @login_token = params[:token]
-    @use_openid = params[:use_openid].to_i == 1
-    render :action => (@login_token.nil? ? 'new' : 'new_token')
-  end
-  
-  def show
-    create
+  app.get '/sessions/new' do
+    new_session_handler
   end
 
-  def create
+  app.get '/login' do
+    new_session_handler
+  end
+
+  app.post '/sessions' do
     logout_keeping_session!
     
     if !params[:token].nil?
@@ -54,38 +69,33 @@ class SessionsController < ApplicationController
       # button. Uncomment if you understand the tradeoffs.
       # reset_session
       self.current_user = user
-      new_cookie_flag = (params[:remember_me] == "1")
-      handle_remember_cookie! new_cookie_flag
       redirect_back_or_default('/')
       error_status(false, 'response.login_success')
     else
       note_failed_signin
       @login       = params[:email]
-      @remember_me = params[:remember_me]
       @login_token = params[:token]
       @login_email = params[:token_email]
-      render :action => (@login_token.nil? ? 'new' : 'new_token')
+
+      if @login_token.nil?
+        haml :'sessions/new', :layout => :'layouts/dialog'
+      else
+        haml :'sessions/new_token', :layout => :'layouts/dialog'
+      end
     end
   end
 
-  def destroy
+  app.delete '/logout' do
+    load_session
     logout_killing_session!
     error_status(false, 'response.login_success')
     
     respond_to do |f|
       f.html {redirect_back_or_default('/')}
-      f.js {}
+      f.js { halt "location.reload();" }
     end
   end
 
-protected
-  # Track failed login attempts
-  def note_failed_signin
-    error_status(true, 'response.login_failure', {}, false)
-    logger.warn "Failed login for '#{params[:email]}' from #{request.remote_ip} at #{Time.now.utc}"
-  end
-  
-  def authorized?(action = action_name, resource = nil)
-    true
-  end 
+end
+
 end

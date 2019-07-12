@@ -1,11 +1,11 @@
 %div
-  = label :name, t('services.name')
+  = f.label :name, t('services.name')
   = f.text_field :name
 %div
-  = label :tag, t('services.tag')
+  = f.label :tag, t('services.tag')
   = f.text_field :tag
 %div
-  = label :rate, t('services.rate')
+  = f.label :rate, t('services.rate')
   = f.text_field :rate #, :disabled => @service.inherit_rate
   = #label :inherit_rate, "Inherit"
   = #f.check_box :inherit_rate

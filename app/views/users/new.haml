@@ -1,5 +1,5 @@
 - @page_title = t('title.settings')
-- form_for @user do |f|
+= form_for @user do |f|
   = error_messages_for :user
-  = render :partial => 'fields', :locals => {:f => f}
+  = haml :'users/_fields', :locals => {:f => f}
   = f.submit t('users.create')

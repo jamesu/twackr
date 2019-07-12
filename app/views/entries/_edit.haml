@@ -1,5 +1,5 @@
 .entry{:id => "entry_#{entry.id}"}
-  - entry_form_for entry do |f| 
+  = entry_form_for entry do |f| 
     = f.text_field :content
     .formActions
       = f.submit t('.submit')

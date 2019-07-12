@@ -1,29 +1,69 @@
-class User < ActiveRecord::Base
-  include Authentication
-  include Authentication::ByCookieToken
+class User < Sequel::Model
+  one_to_many :projects
+  one_to_many :services
+  one_to_many :clients
+  one_to_many :entries, :order => 'start_date DESC'
+
+  plugin :association_dependencies
+  add_association_dependencies projects: :destroy, services: :destroy, clients: :destroy, entries: :destroy
   
-  has_many :projects,  :dependent => :destroy
-  has_many :services,  :dependent => :destroy
-  has_many :clients, :dependent => :destroy
-  has_many :entries,   :dependent => :destroy, :order => 'start_date DESC'
+  many_to_one :default_project, :class => 'Project', :key => 'default_project_id'
+  many_to_one :default_client, :class => 'Client', :key => 'default_client_id'
+  many_to_one :default_service, :class => 'Service', :key => 'default_service_id'
   
-  belongs_to :default_project, :class_name => 'Project', :foreign_key => 'default_project_id'
-  belongs_to :default_client, :class_name => 'Client', :foreign_key => 'default_client_id'
-  belongs_to :default_service, :class_name => 'Service', :foreign_key => 'default_service_id'
-  
-  attr_accessible :email, :password, :password_confirmation, :timezone, :rate
-  
-  before_create :set_timezone
+  ASSIGNABLE_FIELDS = [:email, :password, :password_confirmation, :timezone, :rate]
+
+  plugin :whitelist_security
+  set_allowed_columns(*ASSIGNABLE_FIELDS)
+
+  attr_accessor :password, :password_confirmation
+
+  def build_entry(params)
+    e = Entry.new()
+    e.set_fields(params, Entry::ASSIGNABLE_FIELDS)
+    e[:user_id] = self.user_id
+    e[:project_id] = self.default_project_id
+    e
+  end
+
+  def build_project(params)
+    e = Project.new()
+    e.set_fields(params, Project::ASSIGNABLE_FIELDS)
+    e[:user_id] = self.id
+    e
+  end
+
+  def build_client(params)
+    e = Client.new()
+    e.set_fields(params, Client::ASSIGNABLE_FIELDS)
+    e[:user_id] = self.id
+    e
+  end
+
+  def build_service(params)
+    e = Service.new()
+    e.set_fields(params, Service::ASSIGNABLE_FIELDS)
+    e[:user_id] = self.id
+    e
+  end
+
+  def project_ids
+    projects_dataset.select(:id).naked.all.map(&:values).flatten
+  end
+
+  def before_create
+    set_timezone
+  end
   
   def set_timezone
     self.timezone ||= "UTC"
   end
   
   def self.authenticate(login, pass)
-    user = find(:first, :conditions => ["email = ?", login])
+    user = where(:email => login).first
     if (!user.nil?) and (user.valid_password(pass))
       now = Time.now.utc
-      user.save!
+      user.save_changes(:raise_on_save_failure => true)
       return user
     else
       return nil
@@ -55,7 +95,7 @@ class User < ActiveRecord::Base
       salt = Digest::SHA1.hexdigest(sprintf("%s%08x%05x%.8f", rand(32767), sec, usec, rval))[roffs..roffs+12]
       token = Digest::SHA1.hexdigest(salt + value)
       
-      break if User.find(:first, :conditions => ["token = ?", token]).nil?
+      break if User.where(:token => token).first.nil?
     end
     
     self.salt = salt
@@ -75,14 +115,89 @@ class User < ActiveRecord::Base
   def valid_password(pass)
     return self.token == Digest::SHA1.hexdigest(self.salt + pass)
   end
-  
-  validates_presence_of :email
-  validates_uniqueness_of :email
-  validates_format_of     :email,       :with => Authentication.email_regex, :message => "Invalid email address"
-  
-  validates_presence_of :password, :if => :password_changed?
-  validates_length_of :password, :minimum => 4, :if => :password_changed?
-  
-  validates_confirmation_of :password, :if => :password_changed?
-  
+
+  # AUTH
+
+  def remember_token?
+    tok = remember_token||''
+    (!tok.strip.empty?) && 
+      remember_token_expires_at && (Time.now.utc < remember_token_expires_at.utc)
+  end
+
+  # These create and unset the fields required for remembering users between browser closes
+  def remember_me
+    remember_me_for(86400*14)
+  end
+
+  def remember_me_for(time)
+    remember_me_until Time.now.utc + time
+  end
+
+  def remember_me_until(time)
+    self.remember_token_expires_at = time
+    self.remember_token            = self.class.make_token
+    save_changes(:raise_on_save_failure => true)
+  end
+
+  # refresh token (keeping same expires_at) if it exists
+  def refresh_token
+    if remember_token?
+      self.remember_token = self.class.make_token 
+      save_changes(:raise_on_save_failure => true)    
+    end
+  end
+
+  # 
+  # Deletes the server-side record of the authentication token.  The
+  # client-side (browser cookie) and server-side (this remember_token) must
+  # always be deleted together.
+  #
+  def forget_me
+    self.remember_token_expires_at = nil
+    self.remember_token            = nil
+    save_changes(:raise_on_save_failure => true)
+  end
+
+
+  def self.secure_digest(*args)
+    Digest::SHA1.hexdigest(args.flatten.join('--'))
+  end
+
+  def self.make_token
+    secure_digest(Time.now, (1..10).map{ rand.to_s })
+  end
+
+  #
+
+
+  plugin :validation_helpers
+  def validate
+    super
+    validates_presence :email
+    validates_unique :email
+    #validates_format email_regex, message: "Invalid email address"
+
+    if password_changed?
+      validates_presence :password
+      validates_min_length 4, :password
+      errors.add(:password, 'needs to be confirmed') if self.password != self.password_confirmation
+    end
+  end
+
+  def update_attributes(params)
+    set_fields(params, ASSIGNABLE_FIELDS, :missing => :skip)
+    save_changes() rescue nil
+    return !modified?
+  end
+
+  PATHS = PathDirectory.new
+
+  def form_path
+    if new?
+      PATHS.users_path
+    else
+      PATHS.user_path(self)
+    end
+  end
+
 end

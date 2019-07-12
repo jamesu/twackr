@@ -12,9 +12,10 @@
   - groups = make_entry_groups(@entries)
   - groups.each do |group|
     = entries_header(group[0], group[1], group[2])
-    = render :partial => 'entries/entry', :collection => group[1]
+    - group[1].each do |entry|
+      = haml :'entries/_entry', :locals => {:entry => entry}
   - if @entries.length >= 25
-    = render :partial => 'entries/more', :locals => {:num => 25}
+    = haml :'entries/_more', :locals => {:num => 25}
 
 - content_for :js_templates do
   = "Timer.init();"

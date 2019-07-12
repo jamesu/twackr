@@ -1,5 +1,4 @@
-<%
-render_tabnav :tabsWrapper do 
+<%=render_tabnav :tabs_wrapper do 
     
   # this generates a tab for every controller in your app
   # you'll probably want to delete this and
@@ -8,7 +7,7 @@ render_tabnav :tabsWrapper do
   add_tab do |t|
     t.named "..."
     t.titled t('tabs.list')
-    t.highlights_on @service.nil?
+    t.highlights_on(@service.nil?)
     t.links_to services_path
   end
 
@@ -16,16 +15,16 @@ render_tabnav :tabsWrapper do
     t.named "+"
     t.titled t('tabs.add')
     t.links_to new_service_path
-    t.highlights_on @service && @service.new_record?
+    t.highlights_on(@service && @service.new?)
   end
 
   current_user.services.each do |service|
-	next if service.new_record?
+	next if service.new?
     add_tab do |t|
       t.named service.name
       t.titled t('tabs.go_to', :target => service.name)
       t.links_to service_path(service)
-      t.highlights_on @service == service
+      t.highlights_on(@service == service)
     end
   end
 

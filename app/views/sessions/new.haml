@@ -1,4 +1,4 @@
-- form_tag session_path do
+%form{:action => session_path, :method => 'post'}
   #normal_login.inner{:style => 'display:block'}
     #loginUsernameField
       %label{:for => 'loginUsername'}= t('sessions.username')
@@ -7,10 +7,8 @@
       %label{:for => 'loginPassword'}= t('sessions.password')
       != password_field_tag 'password', nil, :size => 30, :id => 'loginPassword', :class => 'medium'
     #loginCustom
-      = check_box_tag 'remember_me', '1', @remember_me
-      %label.checkbox{:for => 'loginRememberMe'}= t('sessions.remember_me')
       %div
-        != link_to t('sessions.register_account') , :controller => 'users', :action => 'new'
+        %a{:href => new_user_path}= t('sessions.register_account') 
   
   #dialogSubmit
     %button.submit{:type => 'submit'}= t('sessions.login')

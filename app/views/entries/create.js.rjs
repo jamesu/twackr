@@ -1,5 +1,0 @@
-page.insert_html :top, "entries", :partial => 'entries/entry', :object => @entry
-unless @entry.terminated?
-  page.call "Timer.register", @entry.id
-end
-page.visual_effect :appear, "entry_#{@entry.id}"

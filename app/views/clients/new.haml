@@ -1,5 +1,5 @@
 - @page_title = t('title.clients')
-- form_for @client do |f|
+= form_for @client do |f|
   = error_messages_for :client
-  = render :partial => 'fields', :locals => {:f => f}
+  = haml :'clients/_fields', :locals => {:f => f}
   = f.submit t('clients.create')

@@ -1,0 +1,7 @@
+<% @simple_entry = 1 %>
+<%= js_replace("#entry_#{@entry.id}", haml(:'entries/_entry', :locals => {:entry => @entry}) ) %>;
+<% if @entry.done_date %>
+	<%= js_call("Timer.remove", @entry.id) %>;
+<% else %>
+	<%= js_call("Timer.restart", @entry.id) %>;
+<% end %>

@@ -1,5 +1,5 @@
 - @page_title = t('title.projects')
-- form_for @project do |f|
+= form_for @project do |f|
   = error_messages_for :project
-  = render :partial => 'fields', :locals => {:f => f}
+  = haml :'projects/_fields', :locals => {:f => f}
   = f.submit t('projects.create')

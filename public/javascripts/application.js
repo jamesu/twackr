@@ -72,16 +72,16 @@ Timer = {
 	instances: null,
 	
 	init: function() {
-		this.instances = new Hash();
+		this.instances = {};
 		setInterval(Timer.tick, 1000);
 	},
 	
 	register: function(id) {
-		var el = $('entry_' + id);
-		var time = el.down('.entryTime');
-		var start = time.readAttribute('start_date');
+		var el = $('#entry_' + id);
+		var time = el.find('.entryTime');
+		var start = time.attr('start_date');
 		var start_ms = parseISO8601(start).getTime();
-		this.instances.set(id, [time, start_ms]);//Date.parse(start)]);
+		this.instances[id] = [time, start_ms];
 	},
 	
 	restart: function(id) {
@@ -90,21 +90,22 @@ Timer = {
 	},
 	
 	remove: function(id) {
-		var inst = this.instances.get(id);
+		var inst = this.instances[id];
 		if (inst) {
 			inst[0] = null;
 			inst[1] = null;
 			
-			this.instances.unset(id);
+			delete this.instances[id];
 		}
 	},
 	
 	tick: function() {
 		var now = Date.now();
-		Timer.instances.values().forEach(function(inst) {
+		Object.keys(Timer.instances).forEach(function(key) {
+			inst = Timer.instances[key];
 			var delta_s = Math.floor((now - inst[1]) / 1000);
 			var delta_desc = Timer.friendlyTime(delta_s);
-			inst[0].innerHTML = delta_desc;
+			inst[0].html(delta_desc);
 		});
 	},
 	
@@ -114,15 +115,15 @@ Timer = {
 			var cur = header.next();
 			var sum = 0;
 			while (cur) {
-				if (!cur.hasClassName('entry'))
+				if (!cur.hasClass('entry'))
 					break;
 				
-				var time = parseInt(cur.readAttribute('times'));
+				var time = parseInt(cur.attr('times'));
 				sum += time;
 				cur = cur.next();
 			}
 			
-			var span = header.down('span');
+			var span = header.find('span');
 			if (span) {
 				span.innerHTML = Timer.friendlyTime(sum);
 			}

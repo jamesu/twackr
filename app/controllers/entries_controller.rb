@@ -1,99 +1,164 @@
-class EntriesController < ApplicationController
-  before_filter :find_project_opt, :except => [:new, :create]
-  before_filter :find_project, :only => [:new, :create]
-  before_filter :find_entry, :except => [:index, :new, :create, :report]
+module EntriesController
+
+  module Handlers
+
+  def make_time_list(start_date, end_date, &block)
+    # includes start, up to and including end
+    cur_date = start_date
+    list = []
+    while (cur_date <= end_date)
+      list << block.call(cur_date)
+      cur_date += 1
+    end
+    list
+  end
   
-  def index
+  def find_entry
+    begin
+      @entry = (@project || @logged_user).entries_dataset.where(:id => params[:id]).first
+      raise Exception.new if @entry.nil?
+    rescue
+      respond_to do |f|
+        f.html { flash[:error] = t('response.invalid_entry')  }
+      end
+
+      halt
+    end
+  end
+
+  end
+
+
+  def self.registered(app)
+
+  app.helpers EntriesController::Handlers
+
+  app.get '/entries' do
+    load_session
+    find_project_opt
+    @projects = @logged_user.projects
+
+    obj = (@project || @logged_user)
+
     last_id = (params[:last_id] || '0').to_i
-    @prev_entry = last_id != 0 ? @logged_user.entries.find_by_id(last_id) : nil
-    @entries = (@project || @logged_user).entries.find(:all, 
-      :conditions => last_id > 0 ? ['id < ?', last_id] : {}, 
-      :limit => 25, 
-      :order => 'start_date DESC')
+    @prev_entry = last_id != 0 ? @logged_user.entries_dataset.where(:id =>last_id).first : nil
+    @entries = obj.entries_dataset.
+      where(last_id > 0 ? Sequel.lit('id < ?', last_id) : {}).
+      limit(25).
+      order(Sequel.desc(:id)).all
     @last_entry = @entries.length > 0 ? @entries[-1].id : 0
+
+    respond_to do |f|
+      f.html { haml :'entries/index', :layout => :'layouts/default' }
+      f.js { erb :'entries/index.js' }
+    end
   end
   
-  def new
-    @entry = @project.entries.build()
+  app.get '/entries/new' do
+    load_session
+    find_project
+    @entry = @project.entries.new
   end
   
-  def create
-    @entry = (@project || @logged_user.default_project).entries.build(params[:entry])
-    @entry.user = @logged_user
-    
+  app.post '/entries' do
+    load_session
+    find_project_opt
+
+    dat = params[:entry].merge(:user_id => @logged_user.id)
+    @entry = (@project || @logged_user.default_project).build_entry(dat)
+
     respond_to do |f|
       if @entry.save
-        f.html{ redirect_to(entries_path) }
-        f.js {}
+        f.html{ redirect(entries_path) }
+        f.js { erb :'entries/create.js' }
       else
-        f.html{ flash.now[:info] = t('response.error'); render :action => :new }
+        f.html{ flash.now[:info] = t('response.error'); haml :'entries/new', :layout => :'layouts/default' }
+        f.js { erb :'entries/edit.js' }
       end
     end
   end
   
-  def edit
+  app.get '/entries/:id/edit' do
+    load_session
+    find_project_opt
+    find_entry
+
     respond_to do |f|
-      f.js {}
+      f.js { erb :'entries/edit.js' }
     end
   end
   
-  def update
+  app.put '/entries/:id' do
+    load_session
+    find_project_opt
+    find_entry
+
     respond_to do |f|
       if @entry.update_attributes(params[:entry])
-        f.html{ flash.now[:info] = t('response.saved'); redirect_to(entries_path) }
-        f.js {}
+        f.html{ flash.now[:info] = t('response.saved'); redirect(entries_path) }
+        f.js { erb :'entries/update.js' }
       else
-        f.html{ flash.now[:info] = t('response.error'); render :action => :edit }
-        f.js {}
+        f.html{ flash.now[:info] = t('response.error'); haml :'entries/edit', :layout => :'layouts/default' }
+        f.js { erb :'entries/edit.js' }
       end
     end
   end
   
-  def restart
+  app.put '/entries/:id/restart' do
+    load_session
+    find_entry
     @cloned_entry = @project.entries.build()
     @cloned_entry.clone_from(@entry)
     @entry = @cloned_entry
     
     respond_to do |f|
       if @entry.save
-        f.html{ flash.now[:info] = t('response.entry_cloned'); redirect_to(entries_path) }
-        f.js { render :action => :create }
+        f.html{ flash.now[:info] = t('response.entry_cloned'); redirect(entries_path) }
+        f.js { erb :'entries/create.js' }
       else
-        f.html{ flash.now[:info] = t('response.error'); render :action => :edit }
+        f.html{ flash.now[:info] = t('response.error'); haml :'entries/edit', :layout => :'layouts/default'}
       end
     end
   end
   
-  def terminate
+  app.put '/entries/:id/terminate' do
+    load_session
+    find_entry
     @entry.quick_update = true
     @entry.terminate
     
     respond_to do |f|
       if @entry.save
-        f.html{ flash.now[:info] = t('response.entry_terminated'); redirect_to(entries_path) }
-        f.js { render :action => :update }
+        f.html{ flash.now[:info] = t('response.entry_terminated'); redirect(entries_path) }
+        f.js { erb :'entries/update.js' }
       else
-        f.html{ flash.now[:info] = t('response.error'); render :action => :edit }
+        f.html{ flash.now[:info] = t('response.error'); haml :'entries/edit', :layout => :'layouts/default' }
       end
     end
   end
   
-  def destroy
+  app.delete '/entries/:id' do
+    load_session
+    find_entry
     @entry_id = @entry.id
     @entry.destroy
     respond_to do |f|
-      f.html { redirect_to(entries_path) }
-      f.js { }
+      f.html { redirect(entries_path) }
+      f.js { erb :'entries/destroy.js' }
     end
   end
   
-  def show
+  app.get '/entries/:id' do
+    load_session
+    find_entry
     respond_to do |f|
-      f.js { render :action => :update }
+      f.js { erb :'entries/update.js' }
     end
   end
   
-  def report
+  app.get '/entries/report' do
+    load_session
+    find_project_opt
     now = params[:date] ? Date.parse(params[:date]) : Time.now.to_date
     now_t = now.to_time
     report_period = params[:period]
@@ -155,34 +220,9 @@ class EntriesController < ApplicationController
     @sum_range_list = day_list.map {|d|daymap[d]}
     
     respond_to do |f|
-      f.html {}
+      f.html { haml :'entries/report', :layout => :'layouts/default' }
     end
   end
 
-private
-
-  def make_time_list(start_date, end_date, &block)
-    # includes start, up to and including end
-    cur_date = start_date
-    list = []
-    while (cur_date <= end_date)
-      list << block.call(cur_date)
-      cur_date += 1
-    end
-    list
-  end
-  
-  def find_entry
-    begin
-      @entry = (@project || @logged_user).entries.find(params[:id])
-    rescue
-      respond_to do |f|
-        f.html { flash[:error] = t('response.invalid_entry')  }
-      end
-    
-      return false
-    end
-  
-    true
-  end
+end
 end

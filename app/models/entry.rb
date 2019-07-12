@@ -1,15 +1,24 @@
-class Entry < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :project
-  belongs_to :service
-  
-  before_create :check_entry
-  before_update :check_entry_update
-  
-  attr_accessible :content, :service_id, :project_id
+class Entry < Sequel::Model
+  many_to_one :user
+  many_to_one :project
+  many_to_one :service
   
   attr_accessor :quick_update
-  
+  ASSIGNABLE_FIELDS = [:content, :service_id, :project_id, :user_id]
+
+  plugin :whitelist_security
+  set_allowed_columns(*ASSIGNABLE_FIELDS)
+
+  def before_create
+    check_entry
+    super
+  end
+
+  def before_update
+    check_entry_update
+    super
+  end
+
   def start(started_at=nil)
     self.start_date = started_at || Time.now
     self.seconds = nil
@@ -37,8 +46,8 @@ class Entry < ActiveRecord::Base
       is_service = tag[0...1] == '#' and found_service.nil?
 
       # Find
-      tag_project = is_project ? self.user.projects.find_by_tag(tag[1..-1]) : nil
-      tag_service = is_service ? self.user.services.find_by_tag(tag[1..-1]) : nil
+      tag_project = is_project ? self.user.projects_dataset.where(:tag => tag[1..-1]).first : nil
+      tag_service = is_service ? self.user.services_dataset.where(:tag => tag[1..-1]).first : nil
 
       # Assign
       found_service ||= tag_service
@@ -137,13 +146,14 @@ class Entry < ActiveRecord::Base
       # in the content
       built = format_entry(self.original_start)
       
-      self.service = built[:service] if built[:service]
-      self.project = built[:project] if built[:project]
+      self.service = built[:service] if !built[:service].nil?
+      self.project = built[:project] if !built[:project].nil?
+
       self.service ||= self.user.default_service
       self.project ||= self.user.default_project
       
       unless self.original_start.nil?
-        self.start_date = built[:start_date]
+        self.start_date = built[:start_date] || self.original_start
         self.done_date ||= built[:done_date]
         self.seconds_limit = built[:limit]
       end
@@ -170,7 +180,9 @@ class Entry < ActiveRecord::Base
   end
   
   def current_time
-    if self.done_date.nil?
+    if self.start_date.nil?
+      0
+    elsif self.done_date.nil?
       # Use start
       Time.now - self.start_date
     else
@@ -190,7 +202,7 @@ class Entry < ActiveRecord::Base
   end
   
   def date
-    self.start_date.to_date
+    self.start_date.nil? ? nil : self.start_date.to_date
   end
   
   def hours
@@ -207,5 +219,21 @@ class Entry < ActiveRecord::Base
   
   def cost
     (self.service.rate || 0) * hours
+  end
+
+  def update_attributes(params)
+    update_fields(params, ASSIGNABLE_FIELDS, :missing => :skip)
+    save_changes
+    return !modified?
+  end
+
+  PATHS = PathDirectory.new
+
+  def form_path
+    if new?
+      PATHS.entries_path
+    else
+      PATHS.entry_path(self)
+    end
   end
 end

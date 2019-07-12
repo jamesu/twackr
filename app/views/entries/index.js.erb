@@ -1,0 +1,27 @@
+<% 
+@simple_entry = 1
+last_entry_date = @prev_entry.nil? ? nil : @prev_entry.date
+groups = make_entry_groups(@entries)
+
+ gr_output = groups.map do |group|
+  text = ""
+  if group[2] != last_entry_date
+    text += js_before('#entries_more', entries_header(group[0], group[1], group[2])) + ";"
+    if @prev_entry and last_entry_date == @prev_entry.date
+      text += "\n" + js_call('Timer.updateDate', @prev_entry.date.to_s)
+    end
+    last_entry_date = group[2]
+  end
+
+  text += "\n" + js_before( '#entries_more', group[1].map{|v| haml(:'entries/_entry', :locals => {:entry => v}) }.join('') ) + ";\n"
+  text += group[1].map { |e| e.terminated? ? nil : "Timer.register(#{e.id});" }.compact.join("\n")
+  text
+end.join("\n")
+%>
+<%= gr_output %>
+
+<% if @entries.length < 25 %>
+<%= js_element_call('#entries_more', 'remove') %>;
+<% else %>
+<%= js_replace('#entries_more', haml(:'entries/_more', :locals => {:num => 25}) ) %>;
+<% end %>

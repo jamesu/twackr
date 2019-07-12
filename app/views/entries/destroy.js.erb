@@ -1,0 +1,3 @@
+<% @simple_entry = 1 %>
+<%= js_call("Timer.remove", @entry_id) %>;
+<%= js_chain(js_call("$", "#entry_#{@entry.id}"), js_call('remove')) %>

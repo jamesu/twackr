@@ -1,7 +1,7 @@
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
-
-require File.expand_path('../config/application', __FILE__)
-require 'rake'
-
-Twackr::Application.load_tasks
+namespace :db do
+  desc "Run migrations"
+  task :migrate, [:version] do |t, args|
+    db_path = ENV.fetch('DATABASE_URL') rescue 'sqlite://db/development.sqlite3'
+    `sequel -m db/migrations #{db_path}`
+  end
+end

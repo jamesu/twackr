@@ -1,5 +1,4 @@
-<%
-render_tabnav :tabsWrapper do 
+<%=render_tabnav :tabs_wrapper do 
     
   # this generates a tab for every controller in your app
   # you'll probably want to delete this and
@@ -8,31 +7,31 @@ render_tabnav :tabsWrapper do
   add_tab do |t|
     t.named "..."
     t.titled t('tabs.list')
-    t.highlights_on @project.nil? && @entries.nil?
+    t.highlights_on(@project.nil? && @entries.nil?)
     t.links_to projects_path
   end
 
   add_tab do |t|
     t.named "All"
     t.titled t('tabs.all')
-    t.links_to entries_projects_path
-    t.highlights_on @project.nil? && @entries
+    t.links_to entries_path
+    t.highlights_on(@project.nil? && !@entries.nil?)
   end
 
   add_tab do |t|
     t.named "+"
     t.titled t('tabs.add')
     t.links_to new_project_path
-    t.highlights_on @project && @project.new_record?
+    t.highlights_on(@project && @project.new?)
   end
 
   current_user.projects.each do |project|
-	next if project.new_record?
+	next if project.new?
     add_tab do |t|
       t.named project.name
       t.titled  t('tabs.go_to', :target => project.name)
       t.links_to project_path(project)
-      t.highlights_on @project == project
+      t.highlights_on(@project == project)
     end
   end
 

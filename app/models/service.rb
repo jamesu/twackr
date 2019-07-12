@@ -1,13 +1,27 @@
-class Service < ActiveRecord::Base
-  belongs_to :user
-  has_many :entries, :dependent => :destroy, :order => 'start_date DESC'
-  validates_format_of :tag, :with => /[a-zA-Z0-9\-_]*/
-  before_create :handle_rate
+class Service < Sequel::Model
+  many_to_one :user
+  one_to_many :entries, :order => 'start_date DESC'
+
+  plugin :association_dependencies
+  add_association_dependencies entries: :destroy
   
-  attr :inherit_rate
-  attr_accessible :name, :tag, :rate, :inherit_rate
-  after_initialize :set_inherit
+  attr_accessor :inherit_rate
+  ASSIGNABLE_FIELDS = [:name, :tag, :rate, :inherit_rate]
+
+  plugin :whitelist_security
+  set_allowed_columns(*ASSIGNABLE_FIELDS)
+
+  plugin :after_initialize
+
+  def after_initialize
+    set_inherit
+  end
   
+  def before_create
+    handle_rate
+    super
+  end
+
   def set_inherit
     @inherit_rate = true
   end
@@ -38,6 +52,28 @@ class Service < ActiveRecord::Base
   
   def total_expected_rate
     (Entry.sum(:seconds_limit, :conditions => {:service_id => self.id}) / 60.0 / 60.0) * (rate || 0)
+  end
+
+  plugin :validation_helpers
+  def validate
+    super
+    validates_format /[a-zA-Z0-9\-_]*/, :tag, message: 'Tag invalid'
+  end
+
+  def update_attributes(params)
+    update_fields(params, ASSIGNABLE_FIELDS, :missing => :skip)
+    save_changes
+    return !modified?
+  end
+
+  PATHS = PathDirectory.new
+
+  def form_path
+    if new?
+      PATHS.services_path
+    else
+      PATHS.service_path(self)
+    end
   end
 
 end

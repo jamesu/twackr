@@ -1,5 +1,5 @@
 - @page_title = @service.name
-- form_for @service do |f|
+= form_for @service do |f|
   = error_messages_for :service
-  = render :partial => 'fields', :locals => {:f => f}
+  = haml :'services/_fields', :locals => {:f => f}
   = f.submit t('services.update')

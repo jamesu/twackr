@@ -1,6 +1,6 @@
 module EntriesHelper
   def new_entry_form(project, client, service)
-    render :partial => 'entries/new', :locals => {
+    haml :'entries/_new', :locals => {
       :project => project,
       :service => service,
       :entry => Entry.new }
@@ -14,7 +14,7 @@ module EntriesHelper
   end
   
   def entry_tag(type, value)
-    "<div class=\"#{type}\">#{value.escape_html}</div>".html_safe
+    "<div class=\"#{type}\">#{Rack::Utils.escape_html(value)}</div>"
   end
   
   def friendly_time(seconds)
@@ -39,7 +39,9 @@ module EntriesHelper
   def make_entry_groups(entries)
     today = @time_now.to_date
     list = entries.group_by(&:date).map do |date,values|
-      name = if date == today
+      name = if date.nil?
+        "???"
+      elsif date == today
         t('entries.date_today')
       elsif date.year == today.year
         date.strftime t('entries.date_format')
@@ -52,11 +54,11 @@ module EntriesHelper
   end
   
   def entry_project_tag(tag)
-    "<span class=\"project\">\@#{tag}</span>".html_safe
+    "<span class=\"project\">\@#{tag}</span>"
   end
   
   def entry_service_tag(tag)
-    "<span class=\"service\">\##{tag}</span>".html_safe
+    "<span class=\"service\">\##{tag}</span>"
   end
   
   def quicksum_entries(entries)
@@ -69,12 +71,12 @@ module EntriesHelper
   
   def entries_header(date_s, entries, date)
     list = @date_now == date ? [] : entries
-    render :partial => 'entries/header', :locals => {:date_s => date_s, :entries => list, :date => date}
+    haml :'entries/_header', :locals => {:date_s => date_s, :entries => list, :date => date}
   end
   
   def more_entries_link(num, last_id)
     path_name = if @project
-      project_path(@project, :last_id => last_id)
+      project_entries_path(@project, :last_id => last_id)
     elsif @service
       service_path(@service, :last_id => last_id)
     elsif @projects
@@ -82,7 +84,7 @@ module EntriesHelper
     else
       entries_path(:last_id => last_id)
     end
-    link_to t('.display_x_more_entries', :num => num), :url => path_name, :remote => true, :method => :get
+    link_to t('entries.display_x_more_entries', :num => num), :url => path_name, :remote => true, :method => :get
   end
   
   def entry_bar_report(id, values, labels)

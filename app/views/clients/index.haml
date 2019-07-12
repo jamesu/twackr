@@ -1,3 +1,4 @@
 - @page_title = t('title.clients')
 #clients
-  = render :partial => 'clients/client', :collection => @clients
+  - @clients.each do |client|
+    = haml :'clients/_client', :locals => {:client => client}

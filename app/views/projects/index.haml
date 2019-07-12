@@ -1,3 +1,4 @@
 - @page_title = t('title.projects')
 #projects
-  = render :partial => 'projects/project', :collection => @projects
+  - @projects.each do |project|
+    = haml :'projects/_project', :locals => {:project => project}
