@@ -1,4 +1,4 @@
 <% @simple_entry = 1 %>
 <%= js_prepend('#entries', haml(:'entries/_entry', :locals => {:entry => @entry} ) ) %>;
-<% unless @entry.terminated? %><%= js_call("Timer.remove", @entry.id) %>;<% end %>
+<% unless @entry.terminated? %><%= js_call("Timer.register", @entry.id) %>;<% end %>
 <%= js_element_call("entry_#{@entry.id}", 'slideDown') %>;
